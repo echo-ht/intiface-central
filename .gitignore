@@ -150,3 +150,6 @@ target
 # Local Cargo dependency overrides
 /.cargo/config.toml
 docs/assets/screenshots/generated
+
+# Local Flutter SDK archive (too large for git, >100MB)
+flutter_sdk.zip
