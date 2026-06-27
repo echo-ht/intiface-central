@@ -107,28 +107,67 @@ jobs:
       - name: 构建 Release APK
         run: flutter build apk --release
 
-      - name: 分析 APK 里的原生库和关键文件
-        run: |
-          apk=$(ls build/app/outputs/flutter-apk/app-release.apk)
-          echo "APK 路径: $apk"
-          echo "=== APK 内 lib/ 目录 .so 文件 ==="
-          unzip -l "$apk" | grep -E 'lib/[^/]+/[^/]+\.so' || echo '没有找到 .so 文件'
-          echo "=== APK 内 classes.dex 和 AndroidManifest 项 ==="
-          unzip -l "$apk" | grep -E 'classes\.dex|AndroidManifest\.xml' | head -10
-          echo "=== APK 总大小 ==="
-          ls -lh "$apk"
+      - name: 构建 Debug APK（debug 模式显示红屏错误而非直接闪退）
+        run: flutter build apk --debug
 
-      - name: 检查 Rust 原生库构建输出
+      - name: 分析 APK 内容（诊断闪退原因）
         run: |
-          echo "=== 手动 cargoBuild 输出 (app/src/main/jniLibs) ==="
-          find android/app/src/main/jniLibs -type f 2>/dev/null | sort || echo '目录不存在'
-          echo "=== rust_builder cargokit 输出 ==="
-          find rust_builder/build/jniLibs -type f 2>/dev/null | sort || echo '目录不存在'
+          {
+            echo "# APK 诊断报告"
+            echo ""
+            echo "## Release APK"
+            apk_rel=$(ls build/app/outputs/flutter-apk/app-release.apk)
+            echo "路径: $apk_rel"
+            echo "大小: $(ls -lh "$apk_rel" | awk '{print $5}')"
+            echo ""
+            echo "### lib/ 目录 .so 文件"
+            unzip -l "$apk_rel" | grep -E 'lib/[^/]+/[^/]+\.so' || echo '❌ 没有找到 .so 文件'
+            echo ""
+            echo "### classes.dex"
+            unzip -l "$apk_rel" | grep -E 'classes\.dex' | head -5
+            echo ""
+            echo "## Debug APK"
+            apk_dbg=$(ls build/app/outputs/flutter-apk/app-debug.apk)
+            echo "路径: $apk_dbg"
+            echo "大小: $(ls -lh "$apk_dbg" | awk '{print $5}')"
+            echo ""
+            echo "### lib/ 目录 .so 文件"
+            unzip -l "$apk_dbg" | grep -E 'lib/[^/]+/[^/]+\.so' || echo '❌ 没有找到 .so 文件'
+            echo ""
+            echo "## Rust 原生库构建输出"
+            echo "### app/src/main/jniLibs (cargo ndk 输出)"
+            find android/app/src/main/jniLibs -type f 2>/dev/null | sort || echo '目录不存在'
+            echo ""
+            echo "### rust_builder/build/jniLibs (Cargokit 输出)"
+            find rust_builder/build/jniLibs -type f 2>/dev/null | sort || echo '目录不存在'
+            echo ""
+            echo "## 关键检查: librust_lib_intiface_central.so"
+            echo "### Release APK"
+            unzip -l "$apk_rel" | grep 'rust_lib_intiface_central' || echo '❌ Release APK 中缺少 librust_lib_intiface_central.so'
+            echo "### Debug APK"
+            unzip -l "$apk_dbg" | grep 'rust_lib_intiface_central' || echo '❌ Debug APK 中缺少 librust_lib_intiface_central.so'
+          } > apk_diagnostic_report.md 2>&1
+          cat apk_diagnostic_report.md
 
-      - name: 上传 APK 产物
+      - name: 上传诊断报告
         uses: actions/upload-artifact@v4
         with:
-          name: intiface-central-android-apk
-          path: build/app/outputs/flutter-apk/*.apk
+          name: apk-diagnostic-report
+          path: apk_diagnostic_report.md
+          retention-days: 30
+
+      - name: 上传 Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: intiface-central-android-apk-release
+          path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
+          retention-days: 30
+
+      - name: 上传 Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: intiface-central-android-apk-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: warn
           retention-days: 30
