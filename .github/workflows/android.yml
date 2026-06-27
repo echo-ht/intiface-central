@@ -65,10 +65,12 @@ jobs:
           echo "ANDROID_NDK_ROOT=${NDK_HOME}" >> "$GITHUB_ENV"
           echo "使用 NDK: ${NDK_HOME}"
 
-      - name: 生成 Gradle Wrapper
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.13'
+      - name: 下载并安装 Gradle 8.13（用于生成 gradlew）
+        run: |
+          cd /tmp
+          curl -fsSL -o gradle-8.13-bin.zip https://services.gradle.org/distributions/gradle-8.13-bin.zip
+          unzip -q gradle-8.13-bin.zip
+          echo "/tmp/gradle-8.13/bin" >> "$GITHUB_PATH"
 
       - name: 生成 gradlew 脚本（仓库已 gitignore，CI 重建）
         run: |
