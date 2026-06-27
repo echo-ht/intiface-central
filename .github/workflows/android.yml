@@ -72,6 +72,13 @@ jobs:
           unzip -q gradle-8.13-bin.zip
           echo "/tmp/gradle-8.13/bin" >> "$GITHUB_PATH"
 
+      - name: 创建 android/local.properties（settings.gradle 需要 flutter.sdk）
+        run: |
+          FLUTTER_BIN="$(which flutter)"
+          FLUTTER_SDK="$(dirname "$(dirname "$FLUTTER_BIN")")"
+          echo "flutter.sdk=${FLUTTER_SDK}" > android/local.properties
+          echo "Flutter SDK: ${FLUTTER_SDK}"
+
       - name: 生成 gradlew 脚本（仓库已 gitignore，CI 重建）
         run: |
           cd android
