@@ -107,6 +107,12 @@ dependencies {
         if (task.name == "javaPreCompile$taskPostfix") {
             task.dependsOn "cargoBuild$taskPostfix"
         }
+        // 确保 mergeNativeLibs 在 cargoBuild 完成后执行，
+        // 否则 Release APK 可能缺少 Rust .so 文件导致闪退
+        if (task.name == "merge${taskPostfix}NativeLibs") {
+            task.dependsOn "cargoBuild$taskPostfix"
+            task.outputs.upToDateWhen { false }
+        }
     }
     tasks.register("cargoBuild$taskPostfix", Exec) {
         // Until https://github.com/bbqsrc/cargo-ndk/pull/13 is merged,
