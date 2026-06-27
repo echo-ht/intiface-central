@@ -124,6 +124,8 @@ jobs:
           find android/app/src/main/jniLibs -type f 2>/dev/null | sort || echo '目录不存在'
           echo "=== rust_builder cargokit 输出 ==="
           find rust_builder/build/jniLibs -type f 2>/dev/null | sort || echo '目录不存在'
+
+      - name: 上传 APK 产物
         uses: actions/upload-artifact@v4
         with:
           name: intiface-central-android-apk
