@@ -354,8 +354,9 @@ class _CyberDeviceCard extends StatelessWidget {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.vibration, size: 12, color: CyberColors.secondary.withOpacity(0.7)),
-                          const SizedBox(width: 4),
+                          // 根据真实 features 显示功能图标
+                          ..._buildFeatureIcons(definition),
+                          const SizedBox(width: 6),
                           Text(
                             isConnected ? '已连接' : '未连接',
                             style: TextStyle(
@@ -393,11 +394,37 @@ class _CyberDeviceCard extends StatelessWidget {
                   ),
               ],
             ),
-            // 电池条已移至详情页 (通过 DeviceInputBloc 获取)
           ],
         ),
       ),
     );
+  }
+
+  /// 根据 definition.features 的真实 output 类型生成功能图标列表
+  List<Widget> _buildFeatureIcons(ExposedServerDeviceDefinition def) {
+    final iconColor = CyberColors.secondary.withOpacity(0.7);
+    const iconSize = 12.0;
+    final added = <String>{};
+    final icons = <Widget>[];
+
+    void addIcon(String key, IconData icon) {
+      if (added.add(key)) {
+        if (icons.isNotEmpty) icons.add(const SizedBox(width: 4));
+        icons.add(Icon(icon, size: iconSize, color: iconColor));
+      }
+    }
+
+    for (final feature in def.features) {
+      final output = feature.output;
+      if (output == null) continue;
+      if (output.vibrate != null) addIcon('vibrate', Icons.vibration);
+      if (output.rotate != null) addIcon('rotate', Icons.rotate_right);
+      if (output.oscillate != null) addIcon('oscillate', Icons.waves);
+      if (output.position != null) addIcon('position', Icons.linear_scale);
+      if (output.led != null) addIcon('led', Icons.lightbulb_outline);
+      if (output.temperature != null) addIcon('temperature', Icons.thermostat_outlined);
+    }
+    return icons;
   }
 }
 

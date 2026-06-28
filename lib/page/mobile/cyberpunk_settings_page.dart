@@ -96,7 +96,7 @@ class _VersionCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'v${cubit.currentAppVersion} · ${cubit.currentAppVersion == cubit.latestAppVersion ? "已是最新版" : "有更新可用"}',
+            'v${cubit.currentAppVersion}',
             style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: CyberColors.accent),
           ),
         ],

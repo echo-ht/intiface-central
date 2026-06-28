@@ -38,27 +38,31 @@ class CyberpunkConsolePage extends StatelessWidget {
               curr is ClientConnectedState ||
               curr is ClientDisconnectedState,
           builder: (context, engineState) {
-            return SingleChildScrollView(
-              padding: const EdgeInsets.only(
-                left: CyberSpacing.xl,
-                right: CyberSpacing.xl,
-                bottom: CyberSpacing.xxl,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CyberHeader(
-                    title: '控制台',
-                    subtitle: 'INTIFACE · CONSOLE',
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // 固定区域：标题 + 引擎控制卡片 + 模式标签
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: CyberSpacing.xl),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CyberHeader(
+                        title: '控制台',
+                        subtitle: 'INTIFACE · CONSOLE',
+                      ),
+                      const SizedBox(height: CyberSpacing.lg),
+                      _EngineControlCard(engineState: engineState),
+                      const SizedBox(height: CyberSpacing.lg),
+                      _ModeTabs(),
+                      const SizedBox(height: CyberSpacing.lg),
+                    ],
                   ),
-                  const SizedBox(height: CyberSpacing.lg),
-                  _EngineControlCard(engineState: engineState),
-                  const SizedBox(height: CyberSpacing.lg),
-                  _ModeTabs(),
-                  const SizedBox(height: CyberSpacing.lg),
-                  _ModeConfigArea(),
-                ],
-              ),
+                ),
+                // 配置区域：EngineConfigWidget 等内部用 Expanded，需要 Column+Expanded 包裹
+                // 这些组件自带滚动，无需外层 SingleChildScrollView
+                Expanded(child: _ModeConfigArea()),
+              ],
             );
           },
         );
@@ -412,8 +416,8 @@ class _ModeConfigArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final configCubit = BlocProvider.of<IntifaceConfigurationCubit>(context);
-    // flutter_settings_ui 组件自带滚动和主题，直接渲染
-    // 通过 cyberpunk dark theme 自动适配深色风格
+    // EngineConfigWidget/RepeaterConfigWidget/RestApiConfigWidget 内部使用 Expanded
+    // 并自带滚动，直接返回即可（外层已用 Expanded 包裹）
     return switch (configCubit.appMode) {
       AppMode.engine => const EngineConfigWidget(),
       AppMode.repeater => const RepeaterConfigWidget(),

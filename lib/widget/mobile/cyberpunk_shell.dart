@@ -89,9 +89,7 @@ class CyberpunkMobileShell extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                // 状态栏
-                const CyberStatusBar(),
-                // 页面内容
+                // 页面内容 (SafeArea 已处理系统状态栏)
                 Expanded(child: _buildPage(page)),
                 // 底部导航
                 Padding(
