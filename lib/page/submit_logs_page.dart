@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/util/navigation_cubit.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:sentry/sentry_io.dart';
 
 class SendLogsPage extends StatelessWidget {
@@ -17,12 +18,12 @@ class SendLogsPage extends StatelessWidget {
           child: Column(
             children: [
               const Text(
-                "Send Logs to Developers",
+                IntifaceLocalizations.sendLogsToDevs,
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
               ),
               const SizedBox(height: 8),
               const Text(
-                "Please add your contact info (via email, discord, telegram, x/twitter, bluesky, masto, etc... SUBMISSIONS WITHOUT CONTACT INFO WILL BE IGNORED.) and any information you'd like the devs to know about your issue. Intiface Central logs and config files will be attached automatically.",
+                IntifaceLocalizations.submitLogsDescription,
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
               ),
               const SizedBox(height: 8),
@@ -43,7 +44,7 @@ class SendLogsPage extends StatelessWidget {
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    hintText: "Put contact info here",
+                    hintText: IntifaceLocalizations.putContactInfo,
                   ),
                 ),
               ),
@@ -66,7 +67,7 @@ class SendLogsPage extends StatelessWidget {
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
-                      hintText: "Put issue report here",
+                      hintText: IntifaceLocalizations.putIssueReport,
                     ),
                   ),
                 ),
@@ -74,7 +75,7 @@ class SendLogsPage extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
-                  child: const Text("Send Logs..."),
+                  child: const Text(IntifaceLocalizations.sendLogs),
                   onPressed: () {
                     var contactText = contactController.value.text;
                     var messageText = textController.value.text;
@@ -83,7 +84,7 @@ class SendLogsPage extends StatelessWidget {
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context) {
-                        var contentText = "Sending logs...";
+                        var contentText = IntifaceLocalizations.sendingLogs;
                         var sendFinished = false;
                         var sendFailed = false;
                         var sendStarted = false;
@@ -107,14 +108,14 @@ $messageText""",
                                   )
                                   .then((value) {
                                     setState(() {
-                                      contentText = "Logs sent!";
+                                      contentText = IntifaceLocalizations.logsSent;
                                       sendFinished = true;
                                     });
                                   })
                                   .onError((error, stackTrace) {
                                     setState(() {
                                       contentText =
-                                          "Error sending logs, please try again.";
+                                          IntifaceLocalizations.errorSendingLogs;
                                       sendFinished = true;
                                       sendFailed = true;
                                     });
@@ -138,7 +139,7 @@ $messageText""",
                                           }
                                         }
                                       : null,
-                                  child: const Text('Ok'),
+                                  child: Text(IntifaceLocalizations.ok),
                                 ),
                               ],
                             );

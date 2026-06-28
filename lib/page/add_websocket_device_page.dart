@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/device_configuration/user_device_configuration_cubit.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/widget/stateful_dropdown_button.dart';
 
 class AddWebsocketDevicePage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _AddWebsocketDevicePageState extends State<AddWebsocketDevicePage> {
     return Expanded(
       child: Column(
         children: [
-          _DetailHeader(title: 'Manage Websocket Devices', onBack: widget.onBack),
+          _DetailHeader(title: IntifaceLocalizations.manageWebsocketDevices, onBack: widget.onBack),
           Expanded(
             child: BlocBuilder<UserDeviceConfigurationCubit, UserDeviceConfigurationState>(
               builder: (context, state) {
@@ -57,7 +58,7 @@ class _AddWebsocketDevicePageState extends State<AddWebsocketDevicePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Existing Websocket Devices',
+                                  IntifaceLocalizations.existingWebsocketDevices,
                                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -67,10 +68,10 @@ class _AddWebsocketDevicePageState extends State<AddWebsocketDevicePage> {
                                 SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: DataTable(
-                                    columns: const [
-                                      DataColumn(label: Text('Protocol')),
-                                      DataColumn(label: Text('Name')),
-                                      DataColumn(label: Text('Delete')),
+                                    columns: [
+                                      DataColumn(label: Text(IntifaceLocalizations.protocol)),
+                                      DataColumn(label: Text(IntifaceLocalizations.name)),
+                                      DataColumn(label: Text(IntifaceLocalizations.delete)),
                                     ],
                                     rows: cubit.specifiers.map((entry) {
                                       final (protocol, spec) = entry;
@@ -81,7 +82,7 @@ class _AddWebsocketDevicePageState extends State<AddWebsocketDevicePage> {
                                           DataCell(
                                             TextButton(
                                               onPressed: () => cubit.removeWebsocketDeviceName(protocol, spec.name),
-                                              child: const Text('Delete'),
+                                              child: Text(IntifaceLocalizations.delete),
                                             ),
                                           ),
                                         ],
@@ -103,7 +104,7 @@ class _AddWebsocketDevicePageState extends State<AddWebsocketDevicePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Add New Websocket Device',
+                                IntifaceLocalizations.addNewWebsocketDevice,
                                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -111,7 +112,7 @@ class _AddWebsocketDevicePageState extends State<AddWebsocketDevicePage> {
                               ),
                               const SizedBox(height: 12),
                               StatefulDropdownButton(
-                                label: 'Protocol Type',
+                                label: IntifaceLocalizations.protocolType,
                                 values: sortedProtocols,
                                 valueNotifier: _protocolNotifier,
                               ),
@@ -120,7 +121,7 @@ class _AddWebsocketDevicePageState extends State<AddWebsocketDevicePage> {
                                 width: 250,
                                 child: TextField(
                                   controller: _nameController,
-                                  decoration: const InputDecoration(hintText: 'Device Address', border: OutlineInputBorder()),
+                                  decoration: InputDecoration(hintText: IntifaceLocalizations.deviceAddress, border: const OutlineInputBorder()),
                                 ),
                               ),
                               const SizedBox(height: 16),
@@ -134,7 +135,7 @@ class _AddWebsocketDevicePageState extends State<AddWebsocketDevicePage> {
                                   _protocolNotifier.value = '';
                                 },
                                 icon: const Icon(Icons.add),
-                                label: const Text('Add Websocket Device'),
+                                label: Text(IntifaceLocalizations.addWebsocketDevice),
                               ),
                             ],
                           ),
@@ -164,7 +165,7 @@ class _DetailHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
-          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack, tooltip: 'Back'),
+          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack, tooltip: IntifaceLocalizations.back),
           const SizedBox(width: 4),
           Expanded(
             child: Text(

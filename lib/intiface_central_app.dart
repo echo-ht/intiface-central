@@ -28,6 +28,7 @@ import 'package:intiface_central/bloc/util/gui_settings_cubit.dart';
 import 'package:intiface_central/bloc/util/navigation_cubit.dart';
 import 'package:intiface_central/bloc/util/network_info_cubit.dart';
 import 'package:intiface_central/util/bluetooth_check.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/util/intiface_util.dart';
 import 'package:intiface_central/util/logging.dart';
 import 'package:intiface_central/util/mdns_platform_service.dart';
@@ -152,11 +153,11 @@ class IntifaceCentralApp extends StatelessWidget with WindowListener, TrayListen
     var isRunning = _engineControlBloc?.isRunning ?? false;
     Menu menu = Menu(
       items: [
-        MenuItem(key: 'show_window', label: 'Show Window'),
+        MenuItem(key: 'show_window', label: IntifaceLocalizations.showWindow),
         MenuItem.separator(),
-        MenuItem(key: 'toggle_server', label: isRunning ? 'Stop Server' : 'Start Server'),
+        MenuItem(key: 'toggle_server', label: isRunning ? IntifaceLocalizations.trayStopServer : IntifaceLocalizations.trayStartServer),
         MenuItem.separator(),
-        MenuItem(key: 'quit', label: 'Quit'),
+        MenuItem(key: 'quit', label: IntifaceLocalizations.quit),
       ],
     );
     await trayManager.setContextMenu(menu);
@@ -662,8 +663,8 @@ class IntifaceCentralView extends StatelessWidget {
         return MaterialApp(
           title: 'Intiface Central',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(brightness: Brightness.light, primarySwatch: Colors.blue, useMaterial3: true),
-          darkTheme: ThemeData(brightness: Brightness.dark, primarySwatch: Colors.blue, useMaterial3: true),
+          theme: _buildLightTheme(),
+          darkTheme: _buildDarkTheme(),
           themeMode: themeMode,
           home: const IntifaceCentralPage(),
         );
@@ -704,25 +705,25 @@ class IntifaceCentralPage extends StatelessWidget {
               Future<void> showDongleDialog() => showDialog<void>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text("Lovense USB Dongle Deprecated"),
+                  title: Text(IntifaceLocalizations.lovenseDongleDeprecatedTitle),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "The Lovense USB Dongle device managers are deprecated and will be removed in the next version of Intiface Central.",
+                      Text(
+                        IntifaceLocalizations.lovenseDongleDeprecatedMsg,
                       ),
                       const SizedBox(height: 12),
                       InkWell(
                         onTap: () => launchUrlString("https://intiface.com/docs/intiface-central/brands/lovense/"),
-                        child: const Text(
-                          "Learn more",
-                          style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                        child: Text(
+                          IntifaceLocalizations.learnMore,
+                          style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                         ),
                       ),
                     ],
                   ),
-                  actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
+                  actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(IntifaceLocalizations.ok))],
                 ),
               );
 
@@ -730,25 +731,25 @@ class IntifaceCentralPage extends StatelessWidget {
                 showDialog<void>(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text("Lovense Connect Service Deprecated"),
+                    title: Text(IntifaceLocalizations.lovenseConnectDeprecatedTitle),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "The Lovense Connect Service is deprecated and will be removed in the next version of Intiface Central.",
+                        Text(
+                          IntifaceLocalizations.lovenseConnectDeprecatedMsg,
                         ),
                         const SizedBox(height: 12),
                         InkWell(
                           onTap: () => launchUrlString("https://intiface.com/docs/intiface-central/brands/lovense/"),
-                          child: const Text(
-                            "Learn more",
-                            style: TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
+                          child: Text(
+                            IntifaceLocalizations.learnMore,
+                            style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline),
                           ),
                         ),
                       ],
                     ),
-                    actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK'))],
+                    actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(IntifaceLocalizations.ok))],
                   ),
                 ).then((_) {
                   if (showDongleDeprecation) showDongleDialog();
@@ -765,19 +766,19 @@ class IntifaceCentralPage extends StatelessWidget {
                 barrierDismissible: false, // user must tap button!
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text('Error Loading Configs'),
+                    title: Text(IntifaceLocalizations.errorLoadingConfigs),
                     content: const SingleChildScrollView(
                       child: ListBody(
                         children: <Widget>[
                           Text(
-                            "Intiface Central configuration files were not able to load. They have been deleted and defaults will be restored. Any user specified configurations will need to be reset. We also recommend closing and reopening Intiface Central.",
+                            IntifaceLocalizations.errorLoadingConfigsMsg,
                           ),
                         ],
                       ),
                     ),
                     actions: <Widget>[
                       TextButton(
-                        child: const Text('Ok'),
+                        child: Text(IntifaceLocalizations.ok),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
@@ -793,4 +794,140 @@ class IntifaceCentralPage extends StatelessWidget {
       ),
     );
   }
+}
+
+// ---- 美化后的主题配置 ----
+
+ThemeData _buildLightTheme() {
+  final colorScheme = ColorScheme.fromSeed(
+    seedColor: const Color(0xFF5C6BC0),
+    brightness: Brightness.light,
+  );
+  return ThemeData(
+    useMaterial3: true,
+    colorScheme: colorScheme,
+    fontFamily: null,
+    appBarTheme: AppBarTheme(
+      centerTitle: false,
+      elevation: 0,
+      backgroundColor: colorScheme.surface,
+      foregroundColor: colorScheme.onSurface,
+    ),
+    cardTheme: CardThemeData(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      clipBehavior: Clip.antiAlias,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    ),
+    navigationRailTheme: NavigationRailThemeData(
+      backgroundColor: colorScheme.surfaceContainerLow,
+      indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: colorScheme.surface,
+      selectedItemColor: colorScheme.primary,
+      type: BottomNavigationBarType.fixed,
+    ),
+    dividerTheme: DividerThemeData(
+      space: 1,
+      thickness: 0.5,
+      color: colorScheme.outlineVariant,
+    ),
+    dialogTheme: DialogThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: colorScheme.primary,
+      inactiveTrackColor: colorScheme.surfaceContainerHighest,
+      thumbColor: colorScheme.primary,
+      overlayColor: colorScheme.primary.withValues(alpha: 0.12),
+    ),
+  );
+}
+
+ThemeData _buildDarkTheme() {
+  final colorScheme = ColorScheme.fromSeed(
+    seedColor: const Color(0xFF5C6BC0),
+    brightness: Brightness.dark,
+  );
+  return ThemeData(
+    useMaterial3: true,
+    colorScheme: colorScheme,
+    fontFamily: null,
+    appBarTheme: AppBarTheme(
+      centerTitle: false,
+      elevation: 0,
+      backgroundColor: colorScheme.surface,
+      foregroundColor: colorScheme.onSurface,
+    ),
+    cardTheme: CardThemeData(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      clipBehavior: Clip.antiAlias,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    ),
+    navigationRailTheme: NavigationRailThemeData(
+      backgroundColor: colorScheme.surfaceContainerLow,
+      indicatorShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: colorScheme.surface,
+      selectedItemColor: colorScheme.primary,
+      type: BottomNavigationBarType.fixed,
+    ),
+    dividerTheme: DividerThemeData(
+      space: 1,
+      thickness: 0.5,
+      color: colorScheme.outlineVariant,
+    ),
+    dialogTheme: DialogThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: colorScheme.primary,
+      inactiveTrackColor: colorScheme.surfaceContainerHighest,
+      thumbColor: colorScheme.primary,
+      overlayColor: colorScheme.primary.withValues(alpha: 0.12),
+    ),
+  );
 }

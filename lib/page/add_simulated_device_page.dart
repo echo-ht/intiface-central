@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/device_configuration/user_device_configuration_cubit.dart';
 import 'package:intiface_central/src/rust/api/simulated_devices.dart' as simulated_api;
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 
 class AddSimulatedDevicePage extends StatefulWidget {
   final VoidCallback onBack;
@@ -34,7 +35,7 @@ class _AddSimulatedDevicePageState extends State<AddSimulatedDevicePage> {
     return Expanded(
       child: Column(
         children: [
-          _DetailHeader(title: 'Manage Simulated Devices', onBack: widget.onBack),
+          _DetailHeader(title: IntifaceLocalizations.manageSimulatedDevices, onBack: widget.onBack),
           Expanded(
             child: BlocBuilder<UserDeviceConfigurationCubit, UserDeviceConfigurationState>(
               builder: (context, state) {
@@ -58,7 +59,7 @@ class _AddSimulatedDevicePageState extends State<AddSimulatedDevicePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Existing Simulated Devices',
+                                  IntifaceLocalizations.existingSimulatedDevices,
                                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -68,11 +69,11 @@ class _AddSimulatedDevicePageState extends State<AddSimulatedDevicePage> {
                                 SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: DataTable(
-                                    columns: const [
-                                      DataColumn(label: Text('Device')),
-                                      DataColumn(label: Text('Display Name')),
-                                      DataColumn(label: Text('Address')),
-                                      DataColumn(label: Text('Delete')),
+                                    columns: [
+                                      DataColumn(label: Text(IntifaceLocalizations.device)),
+                                      DataColumn(label: Text(IntifaceLocalizations.displayName)),
+                                      DataColumn(label: Text(IntifaceLocalizations.address)),
+                                      DataColumn(label: Text(IntifaceLocalizations.delete)),
                                     ],
                                     rows: cubit.simulatedDevices.map((device) {
                                       final archetype = archetypesByIdentifier[device.identifier];
@@ -90,7 +91,7 @@ class _AddSimulatedDevicePageState extends State<AddSimulatedDevicePage> {
                                           DataCell(
                                             TextButton(
                                               onPressed: () => cubit.removeSimulatedDevice(device.address),
-                                              child: const Text('Delete'),
+                                              child: Text(IntifaceLocalizations.delete),
                                             ),
                                           ),
                                         ],
@@ -112,7 +113,7 @@ class _AddSimulatedDevicePageState extends State<AddSimulatedDevicePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Add New Simulated Device',
+                                IntifaceLocalizations.addNewSimulatedDevice,
                                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -123,7 +124,7 @@ class _AddSimulatedDevicePageState extends State<AddSimulatedDevicePage> {
                                 width: 300,
                                 child: DropdownButtonFormField<String>(
                                   initialValue: _selectedIdentifier,
-                                  decoration: const InputDecoration(labelText: 'Device Type', border: OutlineInputBorder()),
+                                  decoration: InputDecoration(labelText: IntifaceLocalizations.deviceType, border: const OutlineInputBorder()),
                                   items: archetypes
                                       .map(
                                         (archetype) => DropdownMenuItem<String>(
@@ -147,9 +148,9 @@ class _AddSimulatedDevicePageState extends State<AddSimulatedDevicePage> {
                                 width: 300,
                                 child: TextField(
                                   controller: _displayNameController,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Display Name (Optional)',
-                                    border: OutlineInputBorder(),
+                                  decoration: InputDecoration(
+                                    hintText: IntifaceLocalizations.displayNameOptional,
+                                    border: const OutlineInputBorder(),
                                   ),
                                 ),
                               ),
@@ -168,7 +169,7 @@ class _AddSimulatedDevicePageState extends State<AddSimulatedDevicePage> {
                                         });
                                       },
                                 icon: const Icon(Icons.add),
-                                label: const Text('Add Simulated Device'),
+                                label: Text(IntifaceLocalizations.addSimulatedDevice),
                               ),
                             ],
                           ),
@@ -219,7 +220,7 @@ class _DetailHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
-          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack, tooltip: 'Back'),
+          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack, tooltip: IntifaceLocalizations.back),
           const SizedBox(width: 4),
           Expanded(
             child: Text(

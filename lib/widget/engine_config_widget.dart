@@ -9,6 +9,7 @@ import 'package:intiface_central/bloc/engine/engine_control_bloc.dart';
 import 'package:intiface_central/bloc/util/gui_settings_cubit.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
 import 'package:intiface_central/util/intiface_util.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 class EngineConfigWidget extends StatefulWidget {
@@ -40,7 +41,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
             InkWell(
               onTap: () => launchUrlString(docUrl),
               child: const Text(
-                "Learn more",
+                IntifaceLocalizations.learnMore,
                 style: TextStyle(
                   color: Colors.blue,
                   decoration: TextDecoration.underline,
@@ -52,7 +53,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+            child: const Text(IntifaceLocalizations.ok),
           ),
         ],
       ),
@@ -97,7 +98,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
 
     tiles.addAll([
       SettingsSection(
-        title: _settingsText("Server Settings"),
+        title: _settingsText(IntifaceLocalizations.serverSettings),
         tiles: [
           // Turn this off until we know the server is mostly stable, or have a way to handle crash on startup
           // gracefully.
@@ -105,17 +106,17 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
             enabled: !engineIsRunning,
             initialValue: cubit.startServerOnStartup,
             onToggle: (value) => cubit.startServerOnStartup = value,
-            title: _settingsText("Start Server when Intiface Central Launches"),
+            title: _settingsText(IntifaceLocalizations.startServerOnLaunch),
           ),
           SettingsTile.navigation(
             enabled: !engineIsRunning,
-            title: _settingsText("Server Name"),
+            title: _settingsText(IntifaceLocalizations.serverName),
             value: _settingsText(cubit.serverName),
             onPressed: (context) {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Server Name'),
+                  title: const Text(IntifaceLocalizations.serverName),
                   content: TextField(
                     controller: _serverNameController,
                     onSubmitted: (value) {
@@ -123,20 +124,20 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
                       Navigator.pop(context);
                     },
                     decoration: const InputDecoration(
-                      hintText: "Server Name Entry",
+                      hintText: IntifaceLocalizations.serverNameEntry,
                     ),
                   ),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context, 'Cancel'),
-                      child: const Text('Cancel'),
+                      child: const Text(IntifaceLocalizations.cancel),
                     ),
                     TextButton(
                       onPressed: () {
                         cubit.serverName = _serverNameController.text;
                         Navigator.pop(context);
                       },
-                      child: const Text('OK'),
+                      child: const Text(IntifaceLocalizations.ok),
                     ),
                   ],
                 ),
@@ -145,13 +146,13 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
           ),
           SettingsTile.navigation(
             enabled: !engineIsRunning,
-            title: _settingsText("Server Port"),
+            title: _settingsText(IntifaceLocalizations.serverPort),
             value: _settingsText(cubit.websocketServerPort.toString()),
             onPressed: (context) {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Server Port'),
+                  title: const Text(IntifaceLocalizations.serverPort),
                   content: TextField(
                     keyboardType: TextInputType.number,
                     controller: _websocketPortController,
@@ -168,13 +169,13 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
                       Navigator.pop(context);
                     },
                     decoration: const InputDecoration(
-                      hintText: "Server Port Entry",
+                      hintText: IntifaceLocalizations.serverPortEntry,
                     ),
                   ),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context, 'Cancel'),
-                      child: const Text('Cancel'),
+                      child: const Text(IntifaceLocalizations.cancel),
                     ),
                     TextButton(
                       onPressed: () {
@@ -188,7 +189,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
                         }
                         Navigator.pop(context);
                       },
-                      child: const Text('OK'),
+                      child: const Text(IntifaceLocalizations.ok),
                     ),
                   ],
                 ),
@@ -199,7 +200,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
             enabled: !engineIsRunning,
             initialValue: cubit.websocketServerAllInterfaces,
             onToggle: (value) => cubit.websocketServerAllInterfaces = value,
-            title: _settingsText("Listen on all network interfaces"),
+            title: _settingsText(IntifaceLocalizations.listenAllInterfaces),
           ),
         ],
       ),
@@ -210,7 +211,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
         enabled: !engineIsRunning,
         initialValue: cubit.useBluetoothLE,
         onToggle: (value) => cubit.useBluetoothLE = value,
-        title: _settingsText("Bluetooth LE"),
+        title: _settingsText(IntifaceLocalizations.bluetoothLE),
       ),
     ];
     if (isDesktop()) {
@@ -220,7 +221,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
             enabled: !engineIsRunning,
             initialValue: cubit.useXInput,
             onToggle: (value) => cubit.useXInput = value,
-            title: _settingsText("XBox Compatible Gamepads (XInput)"),
+            title: _settingsText(IntifaceLocalizations.xboxGamepad),
           ),
         ]);
       }
@@ -230,7 +231,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
           enabled: !engineIsRunning,
           initialValue: cubit.useHID,
           onToggle: (value) => cubit.useHID = value,
-          title: _settingsText("HID Devices (Joycon, etc...)"),
+          title: _settingsText(IntifaceLocalizations.hidDevices),
         ),
         SettingsTile.switchTile(
           enabled: !engineIsRunning,
@@ -240,13 +241,13 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
             if (value) {
               _showDeprecationDialog(
                 context,
-                "Lovense Connect Service Deprecated",
-                "The Lovense Connect Service is deprecated and will be removed in the next version of Intiface Central.",
+                IntifaceLocalizations.lovenseConnectDeprecatedTitle,
+                IntifaceLocalizations.lovenseConnectDeprecatedMsg,
                 "https://intiface.com/docs/intiface-central/brands/lovense/",
               );
             }
           },
-          title: _settingsText("Lovense Connect Service (DEPRECATED)"),
+          title: _settingsText(IntifaceLocalizations.lovenseConnectDeprecated),
         ),
         SettingsTile.switchTile(
           enabled: !engineIsRunning,
@@ -256,14 +257,14 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
             if (value) {
               _showDeprecationDialog(
                 context,
-                "Lovense USB Dongle Deprecated",
-                "The Lovense USB Dongle device managers are deprecated and will be removed in the next version of Intiface Central.",
+                IntifaceLocalizations.lovenseDongleDeprecatedTitle,
+                IntifaceLocalizations.lovenseDongleDeprecatedMsg,
                 "https://intiface.com/docs/intiface-central/brands/lovense/",
               );
             }
           },
           title: _settingsText(
-            "Lovense USB Dongle (HID/White Circuit Board) (DEPRECATED)",
+            IntifaceLocalizations.lovenseHIDDongle,
           ),
         ),
       ]);
@@ -272,7 +273,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
     deviceSettings.add(
       SettingsTile(
         title: _settingsText(
-          "Other Device Managers are in Advanced Settings Below",
+          IntifaceLocalizations.otherManagersInAdvanced,
           textAlign: TextAlign.center,
         ),
       ),
@@ -280,7 +281,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
 
     tiles.add(
       SettingsSection(
-        title: _settingsText("Device Managers"),
+        title: _settingsText(IntifaceLocalizations.deviceManagers),
         tiles: deviceSettings,
       ),
     );
@@ -292,7 +293,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
         initialValue: guiSettingsCubit.getExpansionValue(expansionName),
         onToggle: (value) =>
             guiSettingsCubit.setExpansionValue(expansionName, value),
-        title: _settingsText("Show Advanced/Experimental Settings"),
+        title: _settingsText(IntifaceLocalizations.showAdvancedSettings),
       ),
     ];
 
@@ -302,19 +303,19 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
           enabled: !engineIsRunning,
           initialValue: cubit.broadcastServerMdns,
           onToggle: (value) => cubit.broadcastServerMdns = value,
-          title: _settingsText("Broadcast Server Info via mDNS"),
+          title: _settingsText(IntifaceLocalizations.broadcastMdns),
         ),
       );
       advancedSettingsTiles.add(
         SettingsTile.navigation(
           enabled: !engineIsRunning,
-          title: _settingsText("mDNS Identifier Suffix (Optional)"),
+          title: _settingsText(IntifaceLocalizations.mdnsSuffix),
           value: _settingsText(cubit.mdnsSuffix),
           onPressed: (context) {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: const Text('mDNS Suffix'),
+                title: const Text(IntifaceLocalizations.mdnsSuffix),
                 content: TextField(
                   controller: TextEditingController(text: cubit.mdnsSuffix),
                   onSubmitted: (value) {
@@ -322,7 +323,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
                     Navigator.pop(context);
                   },
                   decoration: const InputDecoration(
-                    hintText: "mDNS Suffix Entry",
+                    hintText: IntifaceLocalizations.mdnsSuffixEntry,
                   ),
                 ),
               ),
@@ -333,7 +334,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
     }
 
     var advancedSettings = SettingsSection(
-      title: _settingsText("Advanced/Experimental Settings"),
+      title: _settingsText(IntifaceLocalizations.advancedExperimentalSettings),
       tiles: advancedSettingsTiles,
     );
 
@@ -345,13 +346,13 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
         enabled: !engineIsRunning,
         initialValue: cubit.useDeviceWebsocketServer,
         onToggle: (value) => cubit.useDeviceWebsocketServer = value,
-        title: _settingsText("Device Websocket Server"),
+        title: _settingsText(IntifaceLocalizations.deviceWebsocketServer),
       ),
       SettingsTile.switchTile(
         enabled: !engineIsRunning,
         initialValue: cubit.useSimulatedDevices,
         onToggle: (value) => cubit.useSimulatedDevices = value,
-        title: _settingsText("Simulated Devices"),
+        title: _settingsText(IntifaceLocalizations.simulatedDevices),
       ),
     ];
 
@@ -365,21 +366,21 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
             if (value) {
               _showDeprecationDialog(
                 context,
-                "Lovense USB Dongle Deprecated",
-                "The Lovense USB Dongle device managers are deprecated and will be removed in the next version of Intiface Central.",
+                IntifaceLocalizations.lovenseDongleDeprecatedTitle,
+                IntifaceLocalizations.lovenseDongleDeprecatedMsg,
                 "https://docs.intiface.com/deprecation/lovense-dongle",
               );
             }
           },
           title: _settingsText(
-            "Lovense USB Dongle (Serial/Black Circuit Board) (DEPRECATED)",
+            IntifaceLocalizations.lovenseSerialDongle,
           ),
         ),
         SettingsTile.switchTile(
           enabled: !engineIsRunning,
           initialValue: cubit.useSerialPort,
           onToggle: (value) => cubit.useSerialPort = value,
-          title: _settingsText("Serial Port"),
+          title: _settingsText(IntifaceLocalizations.serialPort),
         ),
       ]);
     }
@@ -387,7 +388,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
     if (guiSettingsCubit.getExpansionValue(expansionName) ?? false) {
       tiles.add(
         SettingsSection(
-          title: _settingsText("Advanced Device Managers"),
+          title: _settingsText(IntifaceLocalizations.advancedDeviceManagers),
           tiles: advancedManagers,
         ),
       );
@@ -405,9 +406,9 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
 
     if (engineIsRunning) {
       widgets.add(
-        const Text(
-          "Some settings may be unavailable while server is running.",
-          style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        Text(
+          IntifaceLocalizations.settingsUnavailableWhileRunning,
+          style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
       );
     }

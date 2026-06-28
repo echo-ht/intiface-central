@@ -3,6 +3,7 @@ import 'package:intiface_central/bloc/device/device_cubit.dart';
 import 'package:intiface_central/bloc/device/device_output_cubit.dart';
 import 'package:intiface_central/src/rust/api/device_config.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/widget/compact_observation_widget.dart';
 
 class DeviceListCard extends StatelessWidget {
@@ -118,11 +119,11 @@ class DeviceListCard extends StatelessWidget {
                               ),
                               if (definition.allow) ...[
                                 const SizedBox(width: 8),
-                                _buildBadge(context, 'ALLOW', Colors.green),
+                                _buildBadge(context, IntifaceLocalizations.allow, Colors.green),
                               ],
                               if (definition.deny) ...[
                                 const SizedBox(width: 8),
-                                _buildBadge(context, 'DENY', Colors.red),
+                                _buildBadge(context, IntifaceLocalizations.deny, Colors.red),
                               ],
                             ],
                           ),

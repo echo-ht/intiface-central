@@ -15,6 +15,7 @@ import 'package:intiface_central/page/device_page.dart';
 import 'package:intiface_central/page/settings_page.dart';
 import 'package:intiface_central/bloc/update/update_bloc.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/util/intiface_util.dart';
 
 class NavigationDestination {
@@ -53,7 +54,7 @@ class BodyWidget extends StatelessWidget {
         (NavigationCubit cubit) => cubit.goNews(),
         const Icon(Icons.newspaper_outlined),
         const Icon(Icons.newspaper),
-        'News',
+        IntifaceLocalizations.navNews,
         () => BlocBuilder<UpdateBloc, UpdateState>(
           buildWhen: (previous, current) => current is NewsUpdateRetrieved,
           builder: (context, state) =>
@@ -77,7 +78,7 @@ class BodyWidget extends StatelessWidget {
         (NavigationCubit cubit) => cubit.goDeviceControl(),
         const Icon(Icons.vibration_outlined),
         const Icon(Icons.vibration),
-        'Devices',
+        IntifaceLocalizations.navDevices,
         () => const DevicePage(),
         true,
         true,
@@ -92,7 +93,7 @@ class BodyWidget extends StatelessWidget {
               : null,
         ),
         const Icon(Icons.text_snippet),
-        'Log',
+        IntifaceLocalizations.navLog,
         () => const LogPage(),
         true,
         true,
@@ -116,7 +117,7 @@ class BodyWidget extends StatelessWidget {
               ? Colors.green
               : null,
         ),
-        'Settings',
+        IntifaceLocalizations.navSettings,
         () => const SettingPage(),
         true,
         true,
@@ -129,7 +130,7 @@ class BodyWidget extends StatelessWidget {
         (NavigationCubit cubit) => cubit.goAbout(),
         const Icon(Icons.help_outlined),
         const Icon(Icons.help),
-        'Help / About',
+        IntifaceLocalizations.navHelpAbout,
         () => const AboutHelpPage(),
         false,
         true,
@@ -143,7 +144,7 @@ class BodyWidget extends StatelessWidget {
           (NavigationCubit cubit) => cubit.goExit(),
           const Icon(Icons.exit_to_app),
           const Icon(Icons.exit_to_app),
-          'Exit',
+          IntifaceLocalizations.navExit,
           () => exit(0),
           false,
           true,
@@ -159,7 +160,7 @@ class BodyWidget extends StatelessWidget {
         (NavigationCubit cubit) => cubit.goSendLogs(),
         const Icon(Icons.help_outlined),
         const Icon(Icons.help),
-        'Send Logs',
+        IntifaceLocalizations.navSendLogs,
         () => const SendLogsPage(),
         false,
         false,

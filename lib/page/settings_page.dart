@@ -8,6 +8,7 @@ import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:intiface_central/widget/settings_version_widget.dart';
 import 'package:intiface_central/widget/settings_app_widget.dart';
 import 'package:intiface_central/widget/settings_reset_widget.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/util/intiface_util.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -28,7 +29,7 @@ class SettingPage extends StatelessWidget {
               title: Center(
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.help_outline),
-                  label: _settingsText("Help / About"),
+                  label: _settingsText(IntifaceLocalizations.helpAbout),
                   onPressed: () {
                     BlocProvider.of<NavigationCubit>(context).goAbout();
                   },
@@ -44,18 +45,18 @@ class SettingPage extends StatelessWidget {
       SettingsVersionWidget(cubit: cubit, engineIsRunning: engineIsRunning),
       SettingsAppWidget(cubit: cubit),
       SettingsSection(
-        title: _settingsText("Experimental Features"),
+        title: _settingsText(IntifaceLocalizations.experimentalFeatures),
         tiles: [
           SettingsTile.switchTile(
             initialValue: cubit.allowExperimentalRestServer,
             onToggle: (value) => cubit.allowExperimentalRestServer = value,
-            title: _settingsText("REST Server"),
+            title: _settingsText(IntifaceLocalizations.restServer),
           ),
           if (isDesktop())
             SettingsTile.switchTile(
               initialValue: cubit.usePrereleaseVersion,
               onToggle: (value) => cubit.usePrereleaseVersion = value,
-              title: _settingsText("Use Prerelease (Beta) Version"),
+              title: _settingsText(IntifaceLocalizations.usePrereleaseVersion),
             ),
         ],
       ),
@@ -65,7 +66,7 @@ class SettingPage extends StatelessWidget {
     if (Platform.isAndroid || Platform.isIOS) {
       tiles.add(
         SettingsSection(
-          title: _settingsText("Advanced Mobile Settings"),
+          title: _settingsText("Ags"),  "
           tiles: [
             SettingsTile.switchTile(
               enabled: !engineIsRunning,
@@ -77,19 +78,19 @@ class SettingPage extends StatelessWidget {
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text('App needs restart'),
+                      title: Text(IntifaceLocalizations.appNeedsRestart),
                       content: const SingleChildScrollView(
                         child: ListBody(
                           children: <Widget>[
                             Text(
-                              'Changing to/from foregrounding requires an app restart. Please close and reopen the application to use foregrounding.',
+                              IntifaceLocalizations.foregroundRestartMessage,
                             ),
                           ],
                         ),
                       ),
                       actions: <Widget>[
                         TextButton(
-                          child: const Text('Ok'),
+                          child: Text(IntifaceLocalizations.ok),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                       ],
@@ -97,10 +98,10 @@ class SettingPage extends StatelessWidget {
                   },
                 );
               },
-              title: _settingsText("Use Foreground Process"),
+              title: _settingsText(IntifaceLocalizations.useForegroundProcess),
             ),
             SettingsTile.navigation(
-              title: _settingsText("Request Bluetooth Permissions"),
+              title: _settingsText(IntifaceLocalizations.requestBluetoothPermissions),
               onPressed: (context) async {
                 bool allGranted;
                 bool anyPermanentlyDenied;
@@ -129,11 +130,11 @@ class SettingPage extends StatelessWidget {
                   showDialog<void>(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Bluetooth permissions granted'),
+                      title: Text(IntifaceLocalizations.bluetoothPermissionsGranted),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Ok'),
+                          child: Text(IntifaceLocalizations.ok),
                         ),
                       ],
                     ),
@@ -152,8 +153,8 @@ class SettingPage extends StatelessWidget {
 
     if (engineIsRunning) {
       widgets.add(
-        const Text(
-          "Some settings may be unavailable while server is running.",
+        Text(
+          IntifaceLocalizations.settingsUnavailableWhileRunning,
           style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
       );

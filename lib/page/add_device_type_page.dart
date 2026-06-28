@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 
 class AddDeviceTypePage extends StatelessWidget {
   final VoidCallback onBack;
@@ -31,7 +32,7 @@ class AddDeviceTypePage extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          _DetailHeader(title: 'Manage Advanced Devices', onBack: onBack),
+          _DetailHeader(title: IntifaceLocalizations.manageAdvancedDevices, onBack: onBack),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
@@ -39,7 +40,7 @@ class AddDeviceTypePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Choose device type',
+                    IntifaceLocalizations.chooseDeviceType,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -50,9 +51,7 @@ class AddDeviceTypePage extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
                       child: Text(
-                        'Advanced device managers can '
-                        'be turned on in the Advanced Settings section of the '
-                        'App Modes panel.',
+                        IntifaceLocalizations.advancedDeviceManagersHint,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -60,24 +59,24 @@ class AddDeviceTypePage extends StatelessWidget {
                     _DeviceTypeCard(
                       key: DocsScreenshotKeys.advancedDeviceTypeSimulated,
                       icon: Icons.memory,
-                      title: 'Simulated Devices',
-                      subtitle: 'Add/Manage a fake test device defined from built-in templates',
+                      title: IntifaceLocalizations.simulatedDevices,
+                      subtitle: IntifaceLocalizations.simulatedDevicesDesc,
                       onTap: onSimulated,
                     ),
                   if (websocketEnabled)
                     _DeviceTypeCard(
                       key: DocsScreenshotKeys.advancedDeviceTypeWebsocket,
                       icon: Icons.language,
-                      title: 'Websocket Devices',
-                      subtitle: 'Add/Manage a device over WebSocket protocol',
+                      title: IntifaceLocalizations.websocketDevices,
+                      subtitle: IntifaceLocalizations.websocketDevicesDesc,
                       onTap: onWebsocket,
                     ),
                   if (serialEnabled)
                     _DeviceTypeCard(
                       key: DocsScreenshotKeys.advancedDeviceTypeSerial,
                       icon: Icons.usb,
-                      title: 'Serial Port Devices',
-                      subtitle: 'Add/Manage a serial port device',
+                      title: IntifaceLocalizations.serialPortDevices,
+                      subtitle: IntifaceLocalizations.serialPortDevicesDesc,
                       onTap: onSerial,
                     ),
                 ],
@@ -102,7 +101,7 @@ class _DetailHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
-          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack, tooltip: 'Back to device list'),
+          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack, tooltip: IntifaceLocalizations.backToDeviceList),
           const SizedBox(width: 4),
           Expanded(
             child: Text(

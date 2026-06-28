@@ -13,6 +13,7 @@ import 'package:intiface_central/bloc/engine/engine_control_bloc.dart';
 import 'package:intiface_central/src/rust/api/device_config.dart';
 import 'package:intiface_central/src/rust/api/enums.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/widget/expandable_card_widget.dart';
 import 'package:intiface_central/widget/observation_chart_widget.dart';
 import 'package:loggy/loggy.dart';
@@ -159,7 +160,7 @@ class _DetailHeader extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: onBack,
-            tooltip: 'Back to device list',
+            tooltip: IntifaceLocalizations.backToDeviceList,
           ),
           const SizedBox(width: 4),
           Expanded(
@@ -193,19 +194,19 @@ class _DeviceInfoSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Device Info',
+            IntifaceLocalizations.deviceInfo,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 12),
-          _infoRow(context, 'Hardware Name', config.name),
+          _infoRow(context, IntifaceLocalizations.hardwareName, config.name),
           if (config.displayName != null)
-            _infoRow(context, 'Display Name', config.displayName!),
-          _infoRow(context, 'Protocol', identifier.protocol),
-          _infoRow(context, 'Address', identifier.address),
-          _infoRow(context, 'Index', config.index.toString()),
+            _infoRow(context, IntifaceLocalizations.displayName, config.displayName!),
+          _infoRow(context, IntifaceLocalizations.protocol, identifier.protocol),
+          _infoRow(context, IntifaceLocalizations.address, identifier.address),
+          _infoRow(context, IntifaceLocalizations.index, config.index.toString()),
         ],
       ),
     );
@@ -264,19 +265,19 @@ class _DeviceConfigSection extends StatelessWidget {
         darkTheme: brightness == Brightness.dark ? transparentBg : null,
         sections: [
           SettingsSection(
-            title: _settingsText('Configuration'),
+            title: _settingsText(IntifaceLocalizations.configuration),
             tiles: [
               SettingsTile.navigation(
                 enabled: !engineRunning,
-                title: _settingsText('Display Name'),
+                title: _settingsText(IntifaceLocalizations.displayName),
                 value: _settingsText(config.displayName ?? ''),
                 onPressed: (context) => _showDisplayNameDialog(context),
               ),
               SettingsTile.navigation(
                 enabled: !engineRunning,
-                title: _settingsText('Message Gap (ms)'),
+                title: _settingsText(IntifaceLocalizations.messageGap),
                 value: _settingsText(
-                  config.messageGapMs?.toString() ?? 'Default',
+                  config.messageGapMs?.toString() ?? IntifaceLocalizations.default_,
                 ),
                 onPressed: (context) => _showMessageGapDialog(context),
               ),
@@ -290,7 +291,7 @@ class _DeviceConfigSection extends StatelessWidget {
                     !value,
                   );
                 },
-                title: _settingsText('Connect to this device'),
+                title: _settingsText(IntifaceLocalizations.connectToThisDevice),
               ),
               SettingsTile.switchTile(
                 enabled: !engineRunning,
@@ -302,9 +303,9 @@ class _DeviceConfigSection extends StatelessWidget {
                     value,
                   );
                 },
-                title: _settingsText('Only connect to this device'),
+                title: _settingsText(IntifaceLocalizations.onlyConnectToThisDevice),
                 description: _settingsText(
-                  'When enabled, only devices with this flag will connect',
+                  IntifaceLocalizations.onlyConnectDescription,
                 ),
               ),
             ],
@@ -319,10 +320,10 @@ class _DeviceConfigSection extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Display Name'),
+        title: Text(IntifaceLocalizations.displayName),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(hintText: 'Display Name Entry'),
+          decoration: InputDecoration(hintText: IntifaceLocalizations.displayNameEntry),
           onSubmitted: (value) async {
             Navigator.pop(dialogContext);
             await userDeviceConfigCubit.updateDisplayName(
@@ -342,11 +343,11 @@ class _DeviceConfigSection extends StatelessWidget {
                 controller.text,
               );
             },
-            child: const Text('Ok'),
+            child: Text(IntifaceLocalizations.ok),
           ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: Text(IntifaceLocalizations.cancel),
           ),
         ],
       ),
@@ -360,13 +361,13 @@ class _DeviceConfigSection extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Message Gap (ms)'),
+        title: Text(IntifaceLocalizations.messageGap),
         content: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: const InputDecoration(
-            hintText: 'Leave empty for default',
+          decoration: InputDecoration(
+            hintText: IntifaceLocalizations.leaveEmptyForDefault,
           ),
           onSubmitted: (value) async {
             Navigator.pop(dialogContext);
@@ -387,7 +388,7 @@ class _DeviceConfigSection extends StatelessWidget {
                 int.tryParse(controller.text),
               );
             },
-            child: const Text('Ok'),
+            child: Text(IntifaceLocalizations.ok),
           ),
           TextButton(
             onPressed: () async {
@@ -398,11 +399,11 @@ class _DeviceConfigSection extends StatelessWidget {
                 null,
               );
             },
-            child: const Text('Clear'),
+            child: Text(IntifaceLocalizations.clear),
           ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
+            child: Text(IntifaceLocalizations.cancel),
           ),
         ],
       ),
@@ -438,8 +439,8 @@ class DeviceControlsSection extends StatelessWidget {
           ListTile(
             title: Text(output.type.name),
             subtitle: Text(
-              'Description: ${output.feature.feature.featureDescription} - '
-              'Step Count: $range',
+              '描述: ${output.feature.feature.featureDescription} - '
+              '步数范围: $range',
             ),
           ),
           BlocBuilder<DeviceOutputCubit, DeviceOutputState>(
@@ -463,10 +464,10 @@ class DeviceControlsSection extends StatelessWidget {
         var range = output.feature.feature.output![output.type]!.value!;
         controls.addAll([
           ListTile(
-            title: const Text('Linear'),
+            title: Text(IntifaceLocalizations.featureLinear),
             subtitle: Text(
-              'Description: ${output.feature.feature.featureDescription} - '
-              'Step Count: $range',
+              '描述: ${output.feature.feature.featureDescription} - '
+              '步数范围: $range',
             ),
           ),
           BlocBuilder<DeviceOutputCubit, DeviceOutputState>(
@@ -492,7 +493,7 @@ class DeviceControlsSection extends StatelessWidget {
                     },
                   ),
                   TextButton(
-                    child: const Text('Toggle Oscillation'),
+                    child: Text(IntifaceLocalizations.toggleOscillation),
                     onPressed: () => output.toggleRunning(),
                   ),
                 ],
@@ -511,8 +512,8 @@ class DeviceControlsSection extends StatelessWidget {
           ListTile(
             title: Text(input.inputType.name),
             subtitle: Text(
-              'Description: ${input.descriptor} - '
-              'Sensor Range: ${input.sensorRange}',
+              '描述: ${input.descriptor} - '
+              '传感器范围: ${input.sensorRange}',
             ),
           ),
           BlocBuilder<DeviceInputBloc, DeviceInputState>(
@@ -535,7 +536,7 @@ class DeviceControlsSection extends StatelessWidget {
             },
           ),
           TextButton(
-            child: const Text('Read Sensor'),
+            child: Text(IntifaceLocalizations.readSensor),
             onPressed: () => input.add(DeviceInputReadEvent()),
           ),
         ]);
@@ -550,7 +551,7 @@ class DeviceControlsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Device Controls',
+            IntifaceLocalizations.deviceControls,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
               color: colorScheme.onSurfaceVariant,
@@ -590,7 +591,7 @@ class _FeatureConfigSection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8, top: 8, bottom: 4),
             child: Text(
-              'Feature Configuration',
+              IntifaceLocalizations.featureConfiguration,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: colorScheme.onSurfaceVariant,
@@ -679,8 +680,8 @@ class _FeatureCard extends StatelessWidget {
       outputWidgets.add(
         const ListTile(
           leading: Icon(Icons.sensors),
-          title: Text('Sensor Input'),
-          subtitle: Text('Available when connected'),
+          title: Text(IntifaceLocalizations.sensorInput),
+          subtitle: Text(IntifaceLocalizations.availableWhenConnected),
         ),
       );
     }
@@ -688,7 +689,7 @@ class _FeatureCard extends StatelessWidget {
     return ExpandableCardWidget(
       expansionName: 'feature-config-${feature.id}',
       title: Text(
-        'Feature: ${_featureName(feature)}',
+        '功能：${_featureName(feature)}',
         style: Theme.of(
           context,
         ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -708,15 +709,15 @@ class _FeatureCard extends StatelessWidget {
 
     final output = feature.output;
     if (output != null) {
-      if (output.vibrate != null) return 'Vibrate';
-      if (output.rotate != null) return 'Rotate';
-      if (output.oscillate != null) return 'Oscillate';
-      if (output.constrict != null) return 'Constrict';
-      if (output.temperature != null) return 'Temperature';
-      if (output.led != null) return 'LED';
-      if (output.spray != null) return 'Spray';
-      if (output.position != null) return 'Position';
-      if (output.positionWithDuration != null) return 'Position With Duration';
+      if (output.vibrate != null) return IntifaceLocalizations.featureVibrate;
+      if (output.rotate != null) return IntifaceLocalizations.featureRotate;
+      if (output.oscillate != null) return IntifaceLocalizations.featureOscillate;
+      if (output.constrict != null) return IntifaceLocalizations.featureConstrict;
+      if (output.temperature != null) return IntifaceLocalizations.featureTemperature;
+      if (output.led != null) return IntifaceLocalizations.featureLED;
+      if (output.spray != null) return IntifaceLocalizations.featureSpray;
+      if (output.position != null) return IntifaceLocalizations.featurePosition;
+      if (output.positionWithDuration != null) return IntifaceLocalizations.featurePositionWithDuration;
     }
 
     final input = feature.input;
@@ -724,17 +725,17 @@ class _FeatureCard extends StatelessWidget {
       final types = input.inputTypes;
       if (types.isNotEmpty) {
         return switch (types.first) {
-          InputType.battery => 'Battery',
-          InputType.rssi => 'RSSI',
-          InputType.button => 'Button',
-          InputType.pressure => 'Pressure',
-          InputType.depth => 'Depth',
-          InputType.position => 'Position',
+          InputType.battery => IntifaceLocalizations.inputBattery,
+          InputType.rssi => IntifaceLocalizations.inputRSSI,
+          InputType.button => IntifaceLocalizations.inputButton,
+          InputType.pressure => IntifaceLocalizations.inputPressure,
+          InputType.depth => IntifaceLocalizations.inputDepth,
+          InputType.position => IntifaceLocalizations.inputPosition,
         };
       }
     }
 
-    return 'Unknown';
+    return IntifaceLocalizations.featureUnknown;
   }
 
   void _buildValueSlider(
@@ -751,14 +752,14 @@ class _FeatureCard extends StatelessWidget {
     widgets.addAll([
       ListTile(
         subtitle: Text(
-          '$type - Step Range - '
-          'Min: ${props.value!.base.$1} Max: ${props.value!.base.$2} '
-          'Step Limit - Min: ${props.value!.user.$1} Max: ${props.value!.user.$2}',
+          '$type - 步数范围 - '
+          '最小: ${props.value!.base.$1} 最大: ${props.value!.base.$2} '
+          '步数限制 - 最小: ${props.value!.user.$1} 最大: ${props.value!.user.$2}',
         ),
       ),
       BlocBuilder<UserDeviceConfigurationCubit, UserDeviceConfigurationState>(
         builder: (context, state) => CheckboxListTile(
-          title: const Text('Disabled'),
+          title: Text(IntifaceLocalizations.disabled),
           value: props.disabled,
           onChanged: engineRunning
               ? null
@@ -808,14 +809,14 @@ class _FeatureCard extends StatelessWidget {
     widgets.addAll([
       ListTile(
         subtitle: Text(
-          '$type - Step Range - '
-          'Min: ${props.position!.base.$1} Max: ${props.position!.base.$2} '
-          'Step Limit - Min: ${props.position!.user.$1} Max: ${props.position!.user.$2}',
+          '$type - 步数范围 - '
+          '最小: ${props.position!.base.$1} 最大: ${props.position!.base.$2} '
+          '步数限制 - 最小: ${props.position!.user.$1} 最大: ${props.position!.user.$2}',
         ),
       ),
       BlocBuilder<UserDeviceConfigurationCubit, UserDeviceConfigurationState>(
         builder: (context, state) => CheckboxListTile(
-          title: const Text('Disabled'),
+          title: Text(IntifaceLocalizations.disabled),
           value: props.disabled,
           onChanged: engineRunning
               ? null
@@ -850,7 +851,7 @@ class _FeatureCard extends StatelessWidget {
       ),
       BlocBuilder<UserDeviceConfigurationCubit, UserDeviceConfigurationState>(
         builder: (context, state) => CheckboxListTile(
-          title: const Text('Reverse'),
+          title: Text(IntifaceLocalizations.reverse),
           value: props.reversePosition,
           onChanged: (engineRunning || props.disabled)
               ? null
@@ -877,14 +878,14 @@ class _FeatureCard extends StatelessWidget {
     widgets.addAll([
       ListTile(
         subtitle: Text(
-          '$type - Position Range - '
-          'Min: ${props.position!.base.$1} Max: ${props.position!.base.$2} '
-          'Step Limit - Min: ${props.position!.user.$1} Max: ${props.position!.user.$2}',
+          '$type - 位置范围 - '
+          '最小: ${props.position!.base.$1} 最大: ${props.position!.base.$2} '
+          '步数限制 - 最小: ${props.position!.user.$1} 最大: ${props.position!.user.$2}',
         ),
       ),
       BlocBuilder<UserDeviceConfigurationCubit, UserDeviceConfigurationState>(
         builder: (context, state) => CheckboxListTile(
-          title: const Text('Disabled'),
+          title: Text(IntifaceLocalizations.disabled),
           value: props.disabled,
           onChanged: engineRunning
               ? null
@@ -919,7 +920,7 @@ class _FeatureCard extends StatelessWidget {
       ),
       BlocBuilder<UserDeviceConfigurationCubit, UserDeviceConfigurationState>(
         builder: (context, state) => CheckboxListTile(
-          title: const Text('Reverse'),
+          title: Text(IntifaceLocalizations.reverse),
           value: props.reversePosition,
           onChanged: (engineRunning || props.disabled)
               ? null
@@ -949,10 +950,9 @@ class _ForgetDeviceButton extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (dialogContext) => AlertDialog(
-                    title: const Text('Forget Device'),
-                    content: const Text(
-                      'This will remove all configuration for this device. '
-                      'Are you sure?',
+                    title: Text(IntifaceLocalizations.forgetDevice),
+                    content: Text(
+                      IntifaceLocalizations.forgetDeviceConfirm,
                     ),
                     actions: [
                       TextButton(
@@ -960,11 +960,11 @@ class _ForgetDeviceButton extends StatelessWidget {
                           Navigator.pop(dialogContext);
                           onPressed();
                         },
-                        child: const Text('Forget'),
+                        child: Text(IntifaceLocalizations.forget),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(dialogContext),
-                        child: const Text('Cancel'),
+                        child: Text(IntifaceLocalizations.cancel),
                       ),
                     ],
                   ),
@@ -972,7 +972,7 @@ class _ForgetDeviceButton extends StatelessWidget {
               }
             : null,
         icon: const Icon(Icons.delete_outline, color: Colors.red),
-        label: const Text('Forget Device'),
+        label: Text(IntifaceLocalizations.forgetDevice),
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(double.infinity, 48),
           foregroundColor: Colors.red,

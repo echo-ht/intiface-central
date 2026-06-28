@@ -11,6 +11,7 @@ import 'package:intiface_central/page/add_websocket_device_page.dart';
 import 'package:intiface_central/page/device_detail_page.dart';
 import 'package:intiface_central/src/rust/api/device_config.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/widget/device_list_card_widget.dart';
 
 enum _DeviceSubPage {
@@ -173,7 +174,7 @@ class _DeviceListView extends StatelessWidget {
                                           );
                                         }
                                       : null,
-                                  child: const Text("Start Scanning"),
+                                  child: Text(IntifaceLocalizations.startScanning),
                                 )
                               : TextButton(
                                   onPressed: engineRunning
@@ -256,7 +257,7 @@ class _AllowModeBanner extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Allow-mode active: only devices marked "Allow" will connect',
+              IntifaceLocalizations.allowModeActive,
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: Colors.green[700]),
@@ -298,13 +299,13 @@ class _NoDevicesView extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'No devices available',
+                      IntifaceLocalizations.noDevicesAvailable,
                       style: Theme.of(context).textTheme.titleMedium,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Start the engine and connect a device to get started.',
+                      IntifaceLocalizations.startEngineToConnect,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -337,7 +338,7 @@ class _AddDeviceButton extends StatelessWidget {
         key: DocsScreenshotKeys.manageAdvancedDevicesCard,
         onPressed: enabled ? onTap : null,
         icon: const Icon(Icons.add),
-        label: const Text('Manage Advanced Devices'),
+        label: Text(IntifaceLocalizations.manageAdvancedDevices),
         style: OutlinedButton.styleFrom(
           minimumSize: const Size(double.infinity, 48),
           side: BorderSide(

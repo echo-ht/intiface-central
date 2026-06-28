@@ -9,6 +9,7 @@ import 'package:intiface_central/util/bluetooth_check.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
 import 'package:intiface_central/util/intiface_util.dart';
 import 'package:loggy/loggy.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 const _portInUseTroubleshootingUrl =
@@ -36,11 +37,11 @@ Future<void> _showPortInUseDialog(
               await launchUrlString(_portInUseTroubleshootingUrl);
             }
           },
-          child: const Text('Open Troubleshooting'),
+          child: const Text(IntifaceLocalizations.openTroubleshooting),
         ),
         TextButton(
           onPressed: () => Navigator.of(dialogContext).pop(),
-          child: const Text('OK'),
+          child: const Text(IntifaceLocalizations.ok),
         ),
       ],
     ),
@@ -72,7 +73,7 @@ class ControlWidget extends StatelessWidget {
             var engineControlBloc = BlocProvider.of<EngineControlBloc>(context);
             var navCubit = BlocProvider.of<NavigationCubit>(context);
 
-            var statusMessage = "Unknown Status";
+            var statusMessage = IntifaceLocalizations.unknownStatus;
             var statusIcon = Icons.question_mark;
             var networkCubit = BlocProvider.of<NetworkInfoCubit>(context);
             var configCubit = BlocProvider.of<IntifaceConfigurationCubit>(
@@ -86,18 +87,18 @@ class ControlWidget extends StatelessWidget {
               statusIcon = Icons.phone_in_talk;
             } else if (state is ClientDisconnectedState ||
                 state is EngineServerCreatedState) {
-              statusMessage = "Server running, no client connected";
+              statusMessage = IntifaceLocalizations.serverRunningNoClient;
               statusIcon = Icons.phone_disabled;
               // Once we're in this state the engine is started.
               buttonAction = () =>
                   engineControlBloc.add(EngineControlEventStop());
             } else if (state is EngineStartedState) {
-              statusMessage = "Server started";
+              statusMessage = IntifaceLocalizations.serverStarted;
               statusIcon = Icons.bedtime;
               buttonAction = () =>
                   engineControlBloc.add(EngineControlEventStop());
             } else if (state is EngineStoppedState) {
-              statusMessage = "Server not running";
+              statusMessage = IntifaceLocalizations.serverNotRunning;
               statusIcon = Icons.bedtime;
               buttonAction = () async {
                 var btProblem = await checkBluetoothReady();
@@ -106,12 +107,12 @@ class ControlWidget extends StatelessWidget {
                   showDialog<void>(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Bluetooth Not Ready'),
+                      title: const Text(IntifaceLocalizations.bluetoothNotReady),
                       content: Text(btProblem),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('OK'),
+                          child: const Text(IntifaceLocalizations.ok),
                         ),
                       ],
                     ),
@@ -130,7 +131,7 @@ class ControlWidget extends StatelessWidget {
               };
             } else if (state is EngineStartingState) {
               statusIcon = Icons.start;
-              statusMessage = "Server starting";
+              statusMessage = IntifaceLocalizations.serverStarting;
               buttonAction = null;
             }
 
@@ -153,7 +154,7 @@ class ControlWidget extends StatelessWidget {
                 ),
                 iconSize: 90,
                 onPressed: null,
-                tooltip: "Engine file not found, run Check For Updates",
+                tooltip: IntifaceLocalizations.engineFileNotFound,
                 icon: const Icon(Icons.error),
               );
             } else {
@@ -172,27 +173,27 @@ class ControlWidget extends StatelessWidget {
                 iconSize: 90,
                 onPressed: buttonAction,
                 tooltip: state is EngineStoppedState
-                    ? "Start Server"
-                    : "Stop Server",
+                    ? IntifaceLocalizations.startServer
+                    : IntifaceLocalizations.stopServer,
                 icon: Icon(
                   state is EngineStoppedState ? Icons.play_arrow : Icons.stop,
                 ),
               );
             }
 
-            var engineStatus = "Engine Status Unknown";
+            var engineStatus = IntifaceLocalizations.engineStatusUnknown;
             switch (configCubit.appMode) {
               case AppMode.engine:
                 if (state is ClientConnectedState) {
-                  engineStatus = "${state.clientName} connected";
+                  engineStatus = "${state.clientName} ${IntifaceLocalizations.clientConnected}";
                 } else if (state is EngineStartedState ||
                     state is EngineServerCreatedState ||
                     state is ClientDisconnectedState) {
-                  engineStatus = "Engine running, waiting for client";
+                  engineStatus = IntifaceLocalizations.engineRunningWaitingClient;
                 } else if (state is EngineStartingState) {
-                  engineStatus = "Engine starting...";
+                  engineStatus = IntifaceLocalizations.engineStarting;
                 } else if (state is EngineStoppedState) {
-                  engineStatus = "Engine not running";
+                  engineStatus = IntifaceLocalizations.engineNotRunning;
                 } else {
                   logWarning("Engine Status $state unknown");
                 }
@@ -201,11 +202,11 @@ class ControlWidget extends StatelessWidget {
                   if (state is EngineStartedState ||
                       state is EngineServerCreatedState ||
                       state is ClientDisconnectedState) {
-                    engineStatus = "Repeater running";
+                    engineStatus = IntifaceLocalizations.repeaterRunning;
                   } else if (state is EngineStoppedState) {
-                    engineStatus = "Repeater not running";
+                    engineStatus = IntifaceLocalizations.repeaterNotRunning;
                   } else if (state is EngineStartingState) {
-                    engineStatus = "Repeater starting...";
+                    engineStatus = IntifaceLocalizations.repeaterStarting;
                   }
                 }
               case AppMode.restApi:
@@ -213,18 +214,18 @@ class ControlWidget extends StatelessWidget {
                   if (state is EngineStartedState ||
                       state is EngineServerCreatedState ||
                       state is ClientDisconnectedState) {
-                    engineStatus = "REST API Server running";
+                    engineStatus = IntifaceLocalizations.restApiRunning;
                   } else if (state is EngineStoppedState) {
-                    engineStatus = "REST API Server not running";
+                    engineStatus = IntifaceLocalizations.restApiNotRunning;
                   } else if (state is EngineStartingState) {
-                    engineStatus = "REST API Server starting...";
+                    engineStatus = IntifaceLocalizations.restApiStarting;
                   }
                 }
             }
 
             List<Widget> columnWidgets = [
               const Text(
-                "Status:",
+                IntifaceLocalizations.status,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(engineStatus),
@@ -233,7 +234,7 @@ class ControlWidget extends StatelessWidget {
             if (configCubit.appMode == AppMode.engine) {
               columnWidgets.addAll([
                 const Text(
-                  "Server Address:",
+                  IntifaceLocalizations.serverAddress,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 BlocBuilder<
@@ -279,7 +280,7 @@ class ControlWidget extends StatelessWidget {
                                 ? true
                                 : false,
                             child: TextButton.icon(
-                              label: const Text("Error"),
+                              label: const Text(IntifaceLocalizations.error),
                               onPressed: () => navCubit.goLogs(),
                               icon: const Icon(Icons.warning),
                               style: ButtonStyle(
@@ -299,7 +300,7 @@ class ControlWidget extends StatelessWidget {
                             configCubit.currentAppVersion !=
                                 configCubit.latestAppVersion,
                         child: TextButton.icon(
-                          label: const Text("Update"),
+                          label: const Text(IntifaceLocalizations.update),
                           onPressed: () => navCubit.goSettings(),
                           icon: const Icon(Icons.update, color: Colors.green),
                           style: ButtonStyle(
@@ -314,7 +315,7 @@ class ControlWidget extends StatelessWidget {
                         child: TextButton.icon(
                           onPressed: () => navCubit.goNews(),
                           icon: const Icon(Icons.newspaper),
-                          label: const Text("News"),
+                          label: const Text(IntifaceLocalizations.news),
                           style: ButtonStyle(
                             foregroundColor: WidgetStateProperty.resolveWith(
                               (s) => Colors.blue,

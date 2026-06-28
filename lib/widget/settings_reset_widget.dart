@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/util/app_reset_cubit.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/util/intiface_util.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:loggy/loggy.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
@@ -36,13 +37,13 @@ class SettingsResetWidget extends AbstractSettingsSection with UiLoggy {
             child: ListBody(
               children: <Widget>[
                 Text(description),
-                const Text('Would you like to continue?'),
+                Text(IntifaceLocalizations.wouldYouLikeToContinue),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Ok'),
+              child: Text(IntifaceLocalizations.ok),
               onPressed: () async {
                 var navigator = Navigator.of(context);
                 var resetCubit = BlocProvider.of<AppResetCubit>(context);
@@ -50,7 +51,7 @@ class SettingsResetWidget extends AbstractSettingsSection with UiLoggy {
               },
             ),
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(IntifaceLocalizations.cancel),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ],
@@ -62,16 +63,16 @@ class SettingsResetWidget extends AbstractSettingsSection with UiLoggy {
   @override
   Widget build(BuildContext context) {
     return SettingsSection(
-      title: _settingsText("Reset Application"),
+      title: _settingsText(IntifaceLocalizations.resetApplication),
       tiles: [
         SettingsTile.navigation(
           onPressed: !engineIsRunning
               ? (context) {
                   _showResetDialog(
                     context,
-                    title: 'Reset User Device Configuration',
+                    title: IntifaceLocalizations.resetUserDeviceConfigTitle,
                     description:
-                        'This will erase the user device configuration, which stores per-device info. It is recommended to stop and restart the application after this step.',
+                        IntifaceLocalizations.resetUserDeviceConfigDesc,
                     onConfirm: (navigator, resetCubit) async {
                       logWarning("Running user device configuration reset");
                       if (await IntifacePaths.userDeviceConfigFile.exists()) {
@@ -84,16 +85,16 @@ class SettingsResetWidget extends AbstractSettingsSection with UiLoggy {
                   );
                 }
               : null,
-          title: _settingsText("Reset User Device Configuration"),
+          title: _settingsText(IntifaceLocalizations.resetUserDeviceConfig),
         ),
         SettingsTile.navigation(
           onPressed: !engineIsRunning
               ? (context) {
                   _showResetDialog(
                     context,
-                    title: 'Reset Application to Defaults',
+                    title: IntifaceLocalizations.resetAppToDefaultsTitle,
                     description:
-                        'This will erase all configuration and downloaded engine/config files. It is recommended to stop and restart the application after this step.',
+                        IntifaceLocalizations.resetAppToDefaultsDesc,
                     onConfirm: (navigator, resetCubit) async {
                       logWarning("Running configuration reset");
                       if (await IntifacePaths.deviceConfigFile.exists()) {
@@ -113,7 +114,7 @@ class SettingsResetWidget extends AbstractSettingsSection with UiLoggy {
                   );
                 }
               : null,
-          title: _settingsText("Reset Application Configuration"),
+          title: _settingsText(IntifaceLocalizations.resetAppConfig),
         ),
       ],
     );

@@ -152,4 +152,4 @@ target
 docs/assets/screenshots/generated
 
 # Local Flutter SDK archive (too large for git, >100MB)
-flutter_sdk.zip
+flutter_sdk.zip.workbuddy/

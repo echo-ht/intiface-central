@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/bloc/util/navigation_cubit.dart';
 import 'package:intiface_central/util/intiface_util.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 class SettingsAppWidget extends AbstractSettingsSection {
@@ -13,21 +14,21 @@ class SettingsAppWidget extends AbstractSettingsSection {
   @override
   Widget build(BuildContext context) {
     const themeModeLabels = {
-      "system": "System",
-      "light": "Light",
-      "dark": "Dark",
+      "system": IntifaceLocalizations.themeSystem,
+      "light": IntifaceLocalizations.themeLight,
+      "dark": IntifaceLocalizations.themeDark,
     };
     var appSettingsTiles = <AbstractSettingsTile>[
       SettingsTile.navigation(
-        title: _settingsText("Theme"),
+        title: _settingsText(IntifaceLocalizations.theme),
         value: _settingsText(
-          themeModeLabels[cubit.themeModeSetting] ?? "System",
+          themeModeLabels[cubit.themeModeSetting] ?? IntifaceLocalizations.themeSystem,
         ),
         onPressed: (context) {
           showDialog<String>(
             context: context,
             builder: (context) => SimpleDialog(
-              title: const Text("Theme"),
+              title: Text(IntifaceLocalizations.theme),
               children: [
                 RadioGroup<String>(
                   groupValue: cubit.themeModeSetting,
@@ -57,13 +58,13 @@ class SettingsAppWidget extends AbstractSettingsSection {
       SettingsTile.switchTile(
         initialValue: cubit.useSideNavigationBar,
         onToggle: (value) => cubit.useSideNavigationBar = value,
-        title: _settingsText("Side Navigation Bar"),
+        title: _settingsText(IntifaceLocalizations.sideNavigationBar),
       ),
       SettingsTile.switchTile(
         initialValue: cubit.checkForUpdateOnStart,
         onToggle: (value) => cubit.checkForUpdateOnStart = value,
         title: _settingsText(
-          "Check For Updates when Intiface Central Launches",
+          IntifaceLocalizations.checkUpdatesOnLaunch,
         ),
       ),
       SettingsTile.switchTile(
@@ -71,10 +72,10 @@ class SettingsAppWidget extends AbstractSettingsSection {
         onToggle: cubit.canUseCrashReporting
             ? ((value) => cubit.crashReporting = value)
             : null,
-        title: _settingsText("Crash Reporting"),
+        title: _settingsText(IntifaceLocalizations.crashReporting),
       ),
       SettingsTile.navigation(
-        title: _settingsText("Send Logs to Developers"),
+        title: _settingsText(IntifaceLocalizations.sendLogsToDevelopers),
         onPressed: (context) =>
             BlocProvider.of<NavigationCubit>(context).goSendLogs(),
       ),
@@ -86,7 +87,7 @@ class SettingsAppWidget extends AbstractSettingsSection {
         SettingsTile.switchTile(
           initialValue: cubit.restoreWindowLocation,
           onToggle: (value) => cubit.restoreWindowLocation = value,
-          title: _settingsText("Restore Window Location on Start"),
+          title: _settingsText(IntifaceLocalizations.restoreWindowLocation),
         ),
       );
 
@@ -95,30 +96,30 @@ class SettingsAppWidget extends AbstractSettingsSection {
         SettingsTile.switchTile(
           initialValue: cubit.useDiscordRichPresence,
           onToggle: (value) => cubit.useDiscordRichPresence = value,
-          title: _settingsText("Enable Discord Rich Presence"),
+          title: _settingsText(IntifaceLocalizations.enableDiscordRichPresence),
         ),
       );
     }
 
     if (supportsTray()) {
       const trayIconModeLabels = {
-        "none": "No Tray Icon",
-        "both": "Tray + Taskbar",
-        "tray_only": "Tray Only",
+        "none": IntifaceLocalizations.trayIconNone,
+        "both": IntifaceLocalizations.trayIconTaskbar,
+        "tray_only": IntifaceLocalizations.trayIconOnly,
       };
 
       appSettingsTiles.insert(
         isDesktop() ? 4 : 2,
         SettingsTile.navigation(
-          title: _settingsText("System Tray Icon"),
+          title: _settingsText(IntifaceLocalizations.systemTrayIcon),
           value: _settingsText(
-            trayIconModeLabels[cubit.trayIconMode] ?? "Tray + Taskbar",
+            trayIconModeLabels[cubit.trayIconMode] ?? IntifaceLocalizations.trayIconTaskbar,
           ),
           onPressed: (context) {
             showDialog<String>(
               context: context,
               builder: (context) => SimpleDialog(
-                title: const Text("System Tray Icon"),
+                title: Text(IntifaceLocalizations.systemTrayIcon),
                 children: [
                   RadioGroup<String>(
                     groupValue: cubit.trayIconMode,
@@ -149,7 +150,7 @@ class SettingsAppWidget extends AbstractSettingsSection {
     }
 
     return SettingsSection(
-      title: _settingsText("App Settings"),
+      title: _settingsText(IntifaceLocalizations.appSettings),
       tiles: appSettingsTiles,
     );
   }

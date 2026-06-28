@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class _NewsPost {
@@ -77,7 +78,7 @@ class _NewsCardWidgetState extends State<NewsCardWidget> {
     final posts = _parseNewsPosts(widget.markdownContent);
 
     if (posts.isEmpty) {
-      return const Expanded(child: Center(child: Text('No news available.')));
+      return const Expanded(child: Center(child: Text(IntifaceLocalizations.noNewsAvailable)));
     }
 
     final colorScheme = Theme.of(context).colorScheme;
@@ -104,7 +105,7 @@ class _NewsCardWidgetState extends State<NewsCardWidget> {
                       _visibleCount += _pageSize;
                     });
                   },
-                  child: const Text('Show more posts'),
+                  child: Text(IntifaceLocalizations.showMorePosts),
                 ),
               ),
             );

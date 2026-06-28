@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/bloc/engine/engine_control_bloc.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 class RepeaterConfigWidget extends StatefulWidget {
@@ -60,17 +61,17 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
               ).isRunning;
               List<AbstractSettingsSection> tiles = [
                 SettingsSection(
-                  title: _settingsText("Repeater Settings"),
+                  title: _settingsText(IntifaceLocalizations.repeaterSettings),
                   tiles: [
                     SettingsTile.navigation(
                       enabled: !engineIsRunning,
-                      title: _settingsText("Repeater Port"),
+                      title: _settingsText(IntifaceLocalizations.repeaterPort),
                       value: _settingsText(cubit.repeaterLocalPort.toString()),
                       onPressed: (context) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Local Port'),
+                            title: Text(IntifaceLocalizations.localPort),
                             content: TextField(
                               keyboardType: TextInputType.number,
                               controller: _repeaterPortController,
@@ -86,15 +87,15 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
                                 }
                                 Navigator.pop(context);
                               },
-                              decoration: const InputDecoration(
-                                hintText: "Local Port",
+                              decoration: InputDecoration(
+                                hintText: IntifaceLocalizations.localPort,
                               ),
                             ),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () =>
                                     Navigator.pop(context, 'Cancel'),
-                                child: const Text('Cancel'),
+                                child: Text(IntifaceLocalizations.cancel),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -108,7 +109,7 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
                                   }
                                   Navigator.pop(context);
                                 },
-                                child: const Text('OK'),
+                                child: Text(IntifaceLocalizations.ok),
                               ),
                             ],
                           ),
@@ -117,28 +118,28 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
                     ),
                     SettingsTile.navigation(
                       enabled: !engineIsRunning,
-                      title: _settingsText("Remote Server Address"),
+                      title: _settingsText(IntifaceLocalizations.remoteServerAddress),
                       value: _settingsText(cubit.repeaterRemoteAddress),
                       onPressed: (context) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Remote Server Address'),
+                            title: Text(IntifaceLocalizations.remoteServerAddress),
                             content: TextField(
                               controller: _repeaterAddressController,
                               onSubmitted: (value) {
                                 cubit.repeaterRemoteAddress = value;
                                 Navigator.pop(context);
                               },
-                              decoration: const InputDecoration(
-                                hintText: "Remote Server Address",
+                              decoration: InputDecoration(
+                                hintText: IntifaceLocalizations.remoteServerAddress,
                               ),
                             ),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () =>
                                     Navigator.pop(context, 'Cancel'),
-                                child: const Text('Cancel'),
+                                child: Text(IntifaceLocalizations.cancel),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -146,7 +147,7 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
                                       _repeaterAddressController.text;
                                   Navigator.pop(context);
                                 },
-                                child: const Text('OK'),
+                                child: Text(IntifaceLocalizations.ok),
                               ),
                             ],
                           ),

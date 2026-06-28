@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/bloc/engine/engine_control_bloc.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 class RestApiConfigWidget extends StatefulWidget {
@@ -54,17 +55,17 @@ class _RestApiConfigWidgetState extends State<RestApiConfigWidget> {
               ).isRunning;
               List<AbstractSettingsSection> tiles = [
                 SettingsSection(
-                  title: const Text("Rest API Settings"),
+                  title: Text(IntifaceLocalizations.restApiSettings),
                   tiles: [
                     SettingsTile.navigation(
                       enabled: !engineIsRunning,
-                      title: const Text("Rest API Port"),
+                      title: Text(IntifaceLocalizations.restApiPort),
                       value: Text(cubit.restLocalPort.toString()),
                       onPressed: (context) {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text('Local Port'),
+                            title: Text(IntifaceLocalizations.localPort),
                             content: TextField(
                               keyboardType: TextInputType.number,
                               controller: _restPortController,
@@ -80,15 +81,15 @@ class _RestApiConfigWidgetState extends State<RestApiConfigWidget> {
                                 }
                                 Navigator.pop(context);
                               },
-                              decoration: const InputDecoration(
-                                hintText: "Local Port",
+                              decoration: InputDecoration(
+                                hintText: IntifaceLocalizations.localPort,
                               ),
                             ),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () =>
                                     Navigator.pop(context, 'Cancel'),
-                                child: const Text('Cancel'),
+                                child: Text(IntifaceLocalizations.cancel),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -102,7 +103,7 @@ class _RestApiConfigWidgetState extends State<RestApiConfigWidget> {
                                   }
                                   Navigator.pop(context);
                                 },
-                                child: const Text('OK'),
+                                child: Text(IntifaceLocalizations.ok),
                               ),
                             ],
                           ),

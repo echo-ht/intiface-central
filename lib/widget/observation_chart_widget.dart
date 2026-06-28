@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/device/observation_cubit.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 
 class ObservationChartWidget extends StatelessWidget {
   final ObservationCubit _observationCubit;
@@ -27,7 +28,7 @@ class ObservationChartWidget extends StatelessWidget {
 
         return Semantics(
           label:
-              'Device output observation ${_observationCubit.deviceIndex}:${_observationCubit.featureIndex}',
+              IntifaceLocalizations.deviceOutputObservation(_observationCubit.deviceIndex, _observationCubit.featureIndex),
           value: latestValue.toStringAsFixed(2),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

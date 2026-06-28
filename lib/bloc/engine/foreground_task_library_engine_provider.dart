@@ -10,6 +10,7 @@ import 'package:intiface_central/bloc/engine/engine_provider.dart';
 import 'package:intiface_central/src/rust/frb_generated.dart';
 import 'package:intiface_central/util/mdns_platform_service.dart';
 import 'package:intiface_central/util/intiface_util.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:loggy/loggy.dart';
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 
@@ -369,10 +370,10 @@ class ForegroundTaskLibraryEngineProvider implements EngineProvider {
     }
     logInfo("_startForegroundTask: calling startService()");
     var reqResult = await FlutterForegroundTask.startService(
-      notificationTitle: 'Intiface Engine is running',
-      notificationText: 'Tap to return to the app',
+      notificationTitle: 'Intiface Engine 运行中',
+      notificationText: '点击返回应用',
       notificationButtons: [
-        const NotificationButton(id: 'stopServerButton', text: 'Stop Server'),
+        const NotificationButton(id: 'stopServerButton', text: IntifaceLocalizations.trayStopServer),
       ],
       callback: startCallback,
     );

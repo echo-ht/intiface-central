@@ -4,6 +4,7 @@ import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit
 import 'package:intiface_central/bloc/util/error_notifier_cubit.dart';
 import 'package:intiface_central/bloc/util/gui_settings_cubit.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/widget/log/widgets/loggy_stream_widget.dart';
 import 'package:loggy/loggy.dart';
 
@@ -39,14 +40,14 @@ class LogPage extends StatelessWidget {
                 children: [
                   ExpansionPanel(
                     headerBuilder: (BuildContext context, bool isExpanded) {
-                      return const ListTile(title: Text("Log Options"));
+                      return ListTile(title: Text(IntifaceLocalizations.logOptions));
                     },
                     body: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       children: [
                         DropdownMenu(
-                          label: const Text("Log Level"),
+                          label: Text(IntifaceLocalizations.logLevel),
                           dropdownMenuEntries: logLevelEntries,
                           onSelected: (value) =>
                               configCubit.displayLogLevel = value!.name,

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/device_configuration/user_device_configuration_cubit.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
+import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/widget/stateful_dropdown_button.dart';
 
 class AddSerialDevicePage extends StatefulWidget {
@@ -49,7 +50,7 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
     return Expanded(
       child: Column(
         children: [
-          _DetailHeader(title: 'Manage Serial Devices', onBack: widget.onBack),
+          _DetailHeader(title: IntifaceLocalizations.manageSerialDevices, onBack: widget.onBack),
           Expanded(
             child: BlocBuilder<UserDeviceConfigurationCubit, UserDeviceConfigurationState>(
               builder: (context, state) {
@@ -70,7 +71,7 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Existing Serial Devices',
+                                  IntifaceLocalizations.existingSerialDevices,
                                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -80,11 +81,11 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
                                 SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: DataTable(
-                                    columns: const [
-                                      DataColumn(label: Text('Protocol')),
-                                      DataColumn(label: Text('Port')),
-                                      DataColumn(label: Text('Info')),
-                                      DataColumn(label: Text('Delete')),
+                                    columns: [
+                                      DataColumn(label: Text(IntifaceLocalizations.protocol)),
+                                      DataColumn(label: Text(IntifaceLocalizations.portName)),
+                                      DataColumn(label: Text(IntifaceLocalizations.info)),
+                                      DataColumn(label: Text(IntifaceLocalizations.delete)),
                                     ],
                                     rows: cubit.serialSpecifiers.map((entry) {
                                       final (protocol, spec) = entry;
@@ -96,7 +97,7 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
                                           DataCell(
                                             TextButton(
                                               onPressed: () => cubit.removeSerialPort(protocol, spec.port),
-                                              child: const Text('Delete'),
+                                              child: Text(IntifaceLocalizations.delete),
                                             ),
                                           ),
                                         ],
@@ -118,7 +119,7 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Add New Serial Device',
+                                IntifaceLocalizations.addNewSerialDevice,
                                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -126,7 +127,7 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
                               ),
                               const SizedBox(height: 12),
                               StatefulDropdownButton<String>(
-                                label: 'Protocol Type',
+                                label: IntifaceLocalizations.protocolType,
                                 values: sortedProtocols,
                                 valueNotifier: _protocolNotifier,
                               ),
@@ -135,7 +136,7 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
                                 width: 250,
                                 child: TextField(
                                   controller: _portController,
-                                  decoration: const InputDecoration(hintText: 'Port Name', border: OutlineInputBorder()),
+                                  decoration: InputDecoration(hintText: IntifaceLocalizations.portName, border: const OutlineInputBorder()),
                                 ),
                               ),
                               const SizedBox(height: 8),
@@ -145,24 +146,24 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
                                   controller: _baudController,
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                  decoration: const InputDecoration(hintText: 'Baud Rate', border: OutlineInputBorder()),
+                                  decoration: InputDecoration(hintText: IntifaceLocalizations.baudRate, border: const OutlineInputBorder()),
                                 ),
                               ),
                               const SizedBox(height: 8),
                               StatefulDropdownButton<int>(
-                                label: 'Data Bits',
+                                label: IntifaceLocalizations.dataBits,
                                 values: const [8, 7, 6, 5, 4, 3, 2, 1],
                                 valueNotifier: _dataBitsNotifier,
                               ),
                               const SizedBox(height: 8),
                               StatefulDropdownButton<String>(
-                                label: 'Parity',
+                                label: IntifaceLocalizations.parity,
                                 values: const ['N', 'E', 'O', 'S', 'M'],
                                 valueNotifier: _parityNotifier,
                               ),
                               const SizedBox(height: 8),
                               StatefulDropdownButton<int>(
-                                label: 'Stop Bits',
+                                label: IntifaceLocalizations.stopBits,
                                 values: const [1, 0],
                                 valueNotifier: _stopBitsNotifier,
                               ),
@@ -188,7 +189,7 @@ class _AddSerialDevicePageState extends State<AddSerialDevicePage> {
                                   _protocolNotifier.value = '';
                                 },
                                 icon: const Icon(Icons.add),
-                                label: const Text('Add Serial Device'),
+                                label: Text(IntifaceLocalizations.addSerialDevice),
                               ),
                             ],
                           ),
@@ -218,7 +219,7 @@ class _DetailHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
-          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack, tooltip: 'Back'),
+          IconButton(icon: const Icon(Icons.arrow_back), onPressed: onBack, tooltip: IntifaceLocalizations.back),
           const SizedBox(width: 4),
           Expanded(
             child: Text(
