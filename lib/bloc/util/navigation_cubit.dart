@@ -14,7 +14,7 @@ enum NavigationPage {
 }
 
 class NavigationCubit extends Cubit<NavigationPage> {
-  NavigationCubit() : super(NavigationPage.news);
+  NavigationCubit() : super(NavigationPage.appControl);
 
   void goAppControl() => emit(NavigationPage.appControl);
   void goSettings() => emit(NavigationPage.settings);

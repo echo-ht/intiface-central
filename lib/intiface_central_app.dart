@@ -32,8 +32,10 @@ import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/util/intiface_util.dart';
 import 'package:intiface_central/util/logging.dart';
 import 'package:intiface_central/util/mdns_platform_service.dart';
+import 'package:intiface_central/theme/cyberpunk.dart';
 import 'package:intiface_central/widget/body_widget.dart';
 import 'package:intiface_central/widget/control_widget.dart';
+import 'package:intiface_central/widget/mobile/cyberpunk_shell.dart';
 import 'package:loggy/loggy.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
@@ -663,9 +665,9 @@ class IntifaceCentralView extends StatelessWidget {
         return MaterialApp(
           title: 'Intiface Central',
           debugShowCheckedModeBanner: false,
-          theme: _buildLightTheme(),
-          darkTheme: _buildDarkTheme(),
-          themeMode: themeMode,
+          theme: isMobile() ? buildCyberpunkTheme() : _buildLightTheme(),
+          darkTheme: isMobile() ? buildCyberpunkTheme() : _buildDarkTheme(),
+          themeMode: isMobile() ? ThemeMode.dark : themeMode,
           home: const IntifaceCentralPage(),
         );
       },
@@ -678,6 +680,38 @@ class IntifaceCentralPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 移动端使用赛博朋克外壳(自带 SafeArea + 全屏极光背景)
+    if (isMobile()) {
+      return BlocBuilder<IntifaceConfigurationCubit, IntifaceConfigurationState>(
+        buildWhen: (previous, current) => current is ConfigurationResetState,
+        builder: (context, state) {
+          var userCubit = BlocProvider.of<UserDeviceConfigurationCubit>(context);
+          var configCubit = BlocProvider.of<IntifaceConfigurationCubit>(context);
+          _maybeShowDeprecationDialogs(context, configCubit);
+          if (userCubit.createError != null) {
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => showDialog<void>(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) => AlertDialog(
+                  title: Text(IntifaceLocalizations.errorLoadingConfigs),
+                  content: const SingleChildScrollView(
+                    child: ListBody(children: [Text(IntifaceLocalizations.errorLoadingConfigsMsg)]),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text(IntifaceLocalizations.ok),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+          return const Scaffold(body: CyberpunkMobileShell());
+        },
+      );
+    }
     return SafeArea(
       child: BlocBuilder<IntifaceConfigurationCubit, IntifaceConfigurationState>(
         buildWhen: (previous, current) => current is UseCompactDisplayState || current is ConfigurationResetState,
@@ -789,11 +823,81 @@ class IntifaceCentralPage extends StatelessWidget {
               ),
             );
           }
-          return Scaffold(body: Column(children: widgets));
+          return Scaffold(
+            body: isMobile()
+                ? const CyberpunkMobileShell()
+                : Column(children: widgets),
+          );
         },
       ),
     );
   }
+}
+
+/// 弃用提示对话框 (移动端/桌面端共用)
+void _maybeShowDeprecationDialogs(BuildContext context, IntifaceConfigurationCubit configCubit) {
+  final showConnectDeprecation =
+      configCubit.useLovenseConnectService && !configCubit.hasAcknowledgedLovenseConnectDeprecation;
+  final showDongleDeprecation =
+      (configCubit.useLovenseHIDDongle || configCubit.useLovenseSerialDongle) &&
+      !configCubit.hasAcknowledgedLovenseDongleDeprecation;
+  if (showConnectDeprecation) {
+    configCubit.hasAcknowledgedLovenseConnectDeprecation = true;
+  }
+  if (showDongleDeprecation) {
+    configCubit.hasAcknowledgedLovenseDongleDeprecation = true;
+  }
+  if (!showConnectDeprecation && !showDongleDeprecation) return;
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    Future<void> showDongleDialog() => showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(IntifaceLocalizations.lovenseDongleDeprecatedTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(IntifaceLocalizations.lovenseDongleDeprecatedMsg),
+            const SizedBox(height: 12),
+            InkWell(
+              onTap: () => launchUrlString("https://intiface.com/docs/intiface-central/brands/lovense/"),
+              child: Text(IntifaceLocalizations.learnMore,
+                style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline)),
+            ),
+          ],
+        ),
+        actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(IntifaceLocalizations.ok))],
+      ),
+    );
+
+    if (showConnectDeprecation) {
+      showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(IntifaceLocalizations.lovenseConnectDeprecatedTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(IntifaceLocalizations.lovenseConnectDeprecatedMsg),
+              const SizedBox(height: 12),
+              InkWell(
+                onTap: () => launchUrlString("https://intiface.com/docs/intiface-central/brands/lovense/"),
+                child: Text(IntifaceLocalizations.learnMore,
+                  style: const TextStyle(color: Colors.blue, decoration: TextDecoration.underline)),
+              ),
+            ],
+          ),
+          actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(IntifaceLocalizations.ok))],
+        ),
+      ).then((_) {
+        if (showDongleDeprecation) showDongleDialog();
+      });
+    } else {
+      showDongleDialog();
+    }
+  });
 }
 
 // ---- 美化后的主题配置 ----
