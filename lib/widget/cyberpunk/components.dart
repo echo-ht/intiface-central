@@ -314,8 +314,8 @@ class _NeonThumbShape extends RoundSliderThumbShape {
     required RenderBox parentBox,
     required SliderThemeData sliderTheme,
     required Animation<double> enableAnimation,
+    required Animation<double> activationAnimation,
     required TextDirection textDirection,
-    required Offset thumbCenter,
     required bool isEnabled,
     bool? isDiscrete,
     bool? isPressed,
@@ -332,8 +332,8 @@ class _NeonThumbShape extends RoundSliderThumbShape {
       parentBox: parentBox,
       sliderTheme: sliderTheme,
       enableAnimation: enableAnimation,
+      activationAnimation: activationAnimation,
       textDirection: textDirection,
-      thumbCenter: thumbCenter,
       isEnabled: isEnabled,
     );
     // 内发光
