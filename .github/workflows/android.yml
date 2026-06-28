@@ -1,10 +1,10 @@
 name: Android APK Build
 
-# 推送到 main 分支自动构建；也可在 Actions 页面手动触发
+# 推送到 htdev 分支自动构建；也可在 Actions 页面手动触发
 on:
   push:
     branches:
-      - main
+      - htdev
   workflow_dispatch:
 
 concurrency:
