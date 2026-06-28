@@ -311,14 +311,16 @@ class _NeonThumbShape extends RoundSliderThumbShape {
   void paint(
     PaintingContext context,
     Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
     required RenderBox parentBox,
     required SliderThemeData sliderTheme,
-    required Animation<double> enableAnimation,
-    required Animation<double> activationAnimation,
     required TextDirection textDirection,
-    required bool isEnabled,
-    bool? isDiscrete,
-    bool? isPressed,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
   }) {
     // 发光层
     final glowPaint = Paint()
@@ -329,12 +331,16 @@ class _NeonThumbShape extends RoundSliderThumbShape {
     super.paint(
       context,
       center,
+      activationAnimation: activationAnimation,
+      enableAnimation: enableAnimation,
+      isDiscrete: isDiscrete,
+      labelPainter: labelPainter,
       parentBox: parentBox,
       sliderTheme: sliderTheme,
-      enableAnimation: enableAnimation,
-      activationAnimation: activationAnimation,
       textDirection: textDirection,
-      isEnabled: isEnabled,
+      value: value,
+      textScaleFactor: textScaleFactor,
+      sizeWithOverflow: sizeWithOverflow,
     );
     // 内发光
     final innerPaint = Paint()
