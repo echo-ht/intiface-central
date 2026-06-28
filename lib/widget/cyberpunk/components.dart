@@ -232,16 +232,24 @@ class CyberToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = activeColor ?? CyberColors.primary;
+    final disabled = onChanged == null;
     return GestureDetector(
-      onTap: onChanged != null ? () => onChanged!(!value) : null,
+      onTap: disabled ? null : () => onChanged!(!value),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: 48,
         height: 28,
         padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
-          color: value ? color : CyberColors.textDisabled,
+          color: value
+              ? color
+              : Colors.white.withOpacity(disabled ? 0.06 : 0.12),
           borderRadius: BorderRadius.circular(14),
+          border: value
+              ? null
+              : Border.all(
+                  color: Colors.white.withOpacity(disabled ? 0.05 : 0.1),
+                ),
         ),
         child: AnimatedAlign(
           duration: const Duration(milliseconds: 200),
@@ -250,7 +258,7 @@ class CyberToggle extends StatelessWidget {
             width: 22,
             height: 22,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: disabled ? Colors.white.withOpacity(0.3) : Colors.white,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(

@@ -142,6 +142,13 @@ class _EngineControlCard extends StatelessWidget {
           ? (networkCubit.ip ?? '0.0.0.0')
           : 'localhost';
       serverAddress = 'ws://$host:${configCubit.websocketServerPort}';
+    } else if (configCubit.appMode == AppMode.restApi) {
+      final host = configCubit.websocketServerAllInterfaces
+          ? (networkCubit.ip ?? '0.0.0.0')
+          : 'localhost';
+      serverAddress = 'http://$host:${configCubit.restLocalPort}';
+    } else if (configCubit.appMode == AppMode.repeater) {
+      serverAddress = 'relay://${configCubit.repeaterRemoteAddress}';
     }
 
     return GlassCard(

@@ -10,6 +10,7 @@ import 'package:intiface_central/bloc/util/gui_settings_cubit.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
 import 'package:intiface_central/util/intiface_util.dart';
 import 'package:intiface_central/util/intiface_localizations.dart';
+import 'package:intiface_central/theme/cyberpunk.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 class EngineConfigWidget extends StatefulWidget {
@@ -399,6 +400,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
         child: SettingsList(
           key: DocsScreenshotKeys.appModeSettingsBody,
           shrinkWrap: true,
+          darkTheme: cyberpunkSettingsTheme,
           sections: tiles,
         ),
       ),
@@ -419,7 +421,7 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
   }
 }
 
-const _settingsTextStyle = TextStyle(fontFamily: 'Roboto');
+const _settingsTextStyle = TextStyle();
 
 Text _settingsText(String text, {TextAlign? textAlign}) {
   return Text(text, textAlign: textAlign, style: _settingsTextStyle);

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 /// 赛博朋克设计系统 — 设计令牌
 ///
@@ -182,6 +183,23 @@ class CyberTextStyles {
   );
 }
 
+/// flutter_settings_ui 暗色主题 — 匹配赛博朋克风格
+///
+/// 覆盖 SettingsList 默认的灰底/灰卡片，使其融入极暗紫黑背景 + 毛玻璃质感。
+final SettingsThemeData cyberpunkSettingsTheme = SettingsThemeData(
+  settingsListBackground: Colors.transparent,
+  settingsSectionBackground: Colors.transparent,
+  titleTextColor: CyberColors.primary,
+  settingsTileTextColor: CyberColors.textSecondary,
+  inactiveTitleColor: CyberColors.textDisabled,
+  inactiveSubtitleColor: CyberColors.textDisabled,
+  trailingTextColor: CyberColors.textTertiary,
+  leadingIconsColor: CyberColors.textTertiary,
+  dividerColor: CyberColors.glassBorderSubtle,
+  tileHighlightColor: Color(0x0AFFFFFF),
+  tileDescriptionTextColor: CyberColors.textTertiary,
+);
+
 /// 构建赛博朋克暗色主题
 ThemeData buildCyberpunkTheme() {
   return ThemeData(
@@ -242,16 +260,27 @@ ThemeData buildCyberpunkTheme() {
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith((states) {
-        return states.contains(WidgetState.selected)
-            ? Colors.white
-            : CyberColors.textDisabled;
+        if (states.contains(WidgetState.disabled)) {
+          return Colors.white.withOpacity(0.3);
+        }
+        return Colors.white;
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return CyberColors.primary.withOpacity(0.12);
+        }
         return states.contains(WidgetState.selected)
             ? CyberColors.primary
-            : CyberColors.textDisabled;
+            : Colors.white.withOpacity(0.15);
       }),
-      trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return Colors.transparent;
+        }
+        return states.contains(WidgetState.selected)
+            ? Colors.transparent
+            : Colors.white.withOpacity(0.1);
+      }),
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Colors.transparent,

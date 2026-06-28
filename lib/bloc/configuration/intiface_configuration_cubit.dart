@@ -599,7 +599,9 @@ class IntifaceConfigurationCubit extends Cubit<IntifaceConfigurationState> {
       useXinput: isDesktop() ? useXInput : false,
       useLovenseConnect: isDesktop() ? useLovenseConnectService : false,
       useDeviceWebsocketServer: useDeviceWebsocketServer,
-      useSimulatedDevices: useSimulatedDevices,
+      // REST API 模式下 buttplug server 不设置 event listener，
+      // 模拟设备会触发 DeviceListReceived 事件被 drop 并报 warning。
+      useSimulatedDevices: appMode == AppMode.restApi ? false : useSimulatedDevices,
       crashMainThread: false,
       crashTaskThread: false,
       broadcastServerMdns: broadcastServerMdns,

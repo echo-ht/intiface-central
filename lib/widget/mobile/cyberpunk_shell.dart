@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/util/navigation_cubit.dart';
-import 'package:intiface_central/page/about_help_page.dart';
-import 'package:intiface_central/page/submit_logs_page.dart';
+import 'package:intiface_central/page/mobile/cyberpunk_about_page.dart';
+import 'package:intiface_central/page/mobile/cyberpunk_send_logs_page.dart';
 import 'package:intiface_central/page/mobile/cyberpunk_console_page.dart';
 import 'package:intiface_central/page/mobile/cyberpunk_device_page.dart';
 import 'package:intiface_central/page/mobile/cyberpunk_log_page.dart';
@@ -61,9 +61,9 @@ class CyberpunkMobileShell extends StatelessWidget {
         return const CyberpunkSettingsPage();
       case NavigationPage.about:
       case NavigationPage.help:
-        return const AboutHelpPage();
+        return const CyberpunkAboutPage();
       case NavigationPage.sendLogs:
-        return const SendLogsPage();
+        return const CyberpunkSendLogsPage();
       default:
         return const CyberpunkConsolePage();
     }
@@ -76,11 +76,71 @@ class CyberpunkMobileShell extends StatelessWidget {
         final navIndex = _pageToIndex(page);
         final isFullScreen = navIndex == -1;
 
-        // 全屏页面 (关于/发送日志) — 无底部导航
+        // 全屏页面 (关于/帮助/发送日志) — 带返回按钮，无底部导航
         if (isFullScreen) {
+          final title = switch (page) {
+            NavigationPage.about || NavigationPage.help => '关于与帮助',
+            NavigationPage.sendLogs => '发送日志',
+            _ => '',
+          };
+          final goBackTo = (page == NavigationPage.sendLogs)
+              ? NavigationPage.about
+              : NavigationPage.settings;
           return AuroraBackground(
             child: SafeArea(
-              child: _buildPage(page),
+              child: Column(
+                children: [
+                  // 返回栏
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: CyberSpacing.xl,
+                      vertical: CyberSpacing.sm,
+                    ),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            final nav = BlocProvider.of<NavigationCubit>(context);
+                            switch (goBackTo) {
+                              case NavigationPage.about:
+                                nav.goAbout();
+                              default:
+                                nav.goSettings();
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.06),
+                              borderRadius: BorderRadius.circular(CyberRadius.small),
+                              border: Border.all(color: CyberColors.glassBorderSubtle),
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.arrow_back_ios_new, size: 14, color: CyberColors.textSecondary),
+                                SizedBox(width: 4),
+                                Text('返回', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: CyberColors.textSecondary)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: CyberSpacing.lg),
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: CyberColors.textPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // 页面内容 — Expanded 在此 Column 内有效
+                  Expanded(child: _buildPage(page)),
+                ],
+              ),
             ),
           );
         }

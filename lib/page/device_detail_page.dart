@@ -14,12 +14,13 @@ import 'package:intiface_central/src/rust/api/device_config.dart';
 import 'package:intiface_central/src/rust/api/enums.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
 import 'package:intiface_central/util/intiface_localizations.dart';
+import 'package:intiface_central/theme/cyberpunk.dart';
 import 'package:intiface_central/widget/expandable_card_widget.dart';
 import 'package:intiface_central/widget/observation_chart_widget.dart';
 import 'package:loggy/loggy.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
-const _settingsTextStyle = TextStyle(fontFamily: 'Roboto');
+const _settingsTextStyle = TextStyle();
 
 Text _settingsText(String text) {
   return Text(text, style: _settingsTextStyle);
@@ -251,18 +252,12 @@ class _DeviceConfigSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
-    final transparentBg = SettingsThemeData(
-      settingsListBackground: Colors.transparent,
-    );
-
     return KeyedSubtree(
       key: DocsScreenshotKeys.deviceDetailConfiguration,
       child: SettingsList(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        lightTheme: brightness == Brightness.light ? transparentBg : null,
-        darkTheme: brightness == Brightness.dark ? transparentBg : null,
+        darkTheme: cyberpunkSettingsTheme,
         sections: [
           SettingsSection(
             title: _settingsText(IntifaceLocalizations.configuration),

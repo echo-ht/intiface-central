@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/bloc/engine/engine_control_bloc.dart';
 import 'package:intiface_central/util/intiface_localizations.dart';
+import 'package:intiface_central/theme/cyberpunk.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 class RestApiConfigWidget extends StatefulWidget {
@@ -113,7 +114,10 @@ class _RestApiConfigWidgetState extends State<RestApiConfigWidget> {
                   ],
                 ),
               ];
-              return SettingsList(sections: tiles);
+              return SettingsList(
+                darkTheme: cyberpunkSettingsTheme,
+                sections: tiles,
+              );
             },
           );
         },

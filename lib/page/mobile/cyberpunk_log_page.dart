@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/bloc/util/error_notifier_cubit.dart';
 import 'package:intiface_central/theme/cyberpunk.dart';
-import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/widget/cyberpunk/components.dart';
 import 'package:intiface_central/widget/log/widgets/loggy_stream_widget.dart';
 import 'package:loggy/loggy.dart';

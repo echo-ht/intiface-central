@@ -5,6 +5,7 @@ import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit
 import 'package:intiface_central/bloc/engine/engine_control_bloc.dart';
 import 'package:intiface_central/util/docs_screenshot_keys.dart';
 import 'package:intiface_central/util/intiface_localizations.dart';
+import 'package:intiface_central/theme/cyberpunk.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 class RepeaterConfigWidget extends StatefulWidget {
@@ -159,6 +160,7 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
               ];
               return SettingsList(
                 key: DocsScreenshotKeys.appModeSettingsBody,
+                darkTheme: cyberpunkSettingsTheme,
                 sections: tiles,
               );
             },
@@ -169,7 +171,7 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
   }
 }
 
-const _settingsTextStyle = TextStyle(fontFamily: 'Roboto');
+const _settingsTextStyle = TextStyle();
 
 Text _settingsText(String text) {
   return Text(text, style: _settingsTextStyle);

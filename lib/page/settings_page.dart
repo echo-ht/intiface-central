@@ -10,6 +10,7 @@ import 'package:intiface_central/widget/settings_app_widget.dart';
 import 'package:intiface_central/widget/settings_reset_widget.dart';
 import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/util/intiface_util.dart';
+import 'package:intiface_central/theme/cyberpunk.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SettingPage extends StatelessWidget {
@@ -148,7 +149,7 @@ class SettingPage extends StatelessWidget {
     }
 
     List<Widget> widgets = [
-      Expanded(child: SettingsList(sections: tiles, shrinkWrap: true)),
+      Expanded(child: SettingsList(sections: tiles, shrinkWrap: true, darkTheme: cyberpunkSettingsTheme)),
     ];
 
     if (engineIsRunning) {
@@ -166,7 +167,7 @@ class SettingPage extends StatelessWidget {
   }
 }
 
-const _settingsTextStyle = TextStyle(fontFamily: 'Roboto');
+const _settingsTextStyle = TextStyle();
 
 Text _settingsText(String text) {
   return Text(text, style: _settingsTextStyle);
