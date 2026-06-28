@@ -66,7 +66,7 @@ class SettingPage extends StatelessWidget {
     if (Platform.isAndroid || Platform.isIOS) {
       tiles.add(
         SettingsSection(
-          title: _settingsText("Ags"),  "
+          title: _settingsText("Ags"),
           tiles: [
             SettingsTile.switchTile(
               enabled: !engineIsRunning,
