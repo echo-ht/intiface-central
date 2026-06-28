@@ -295,6 +295,7 @@ class _CyberDeviceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasNickname = definition.displayName != null && definition.displayName!.isNotEmpty;
     final displayName = definition.displayName ?? definition.name;
     final isAllowed = definition.allow;
 
@@ -343,6 +344,7 @@ class _CyberDeviceCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // 昵称 (大字) 或硬件名称
                       Text(
                         displayName,
                         style: TextStyle(
@@ -351,6 +353,17 @@ class _CyberDeviceCard extends StatelessWidget {
                           color: isConnected ? CyberColors.textPrimary : CyberColors.textTertiary,
                         ),
                       ),
+                      // 如果有昵称，在下方小字显示硬件名称
+                      if (hasNickname) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          definition.name,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: CyberColors.textTertiary,
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 4),
                       Row(
                         children: [

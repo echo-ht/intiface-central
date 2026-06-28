@@ -106,6 +106,7 @@ class DeviceDetailPage extends StatelessWidget {
                               _DeviceInfoSection(
                                 config: config,
                                 identifier: currentIdentifier,
+                                userDeviceConfigCubit: userDeviceConfigCubit,
                               ),
                               const Divider(),
                               _DeviceConfigSection(
@@ -182,8 +183,13 @@ class _DetailHeader extends StatelessWidget {
 class _DeviceInfoSection extends StatelessWidget {
   final ExposedServerDeviceDefinition config;
   final ExposedUserDeviceIdentifier identifier;
+  final UserDeviceConfigurationCubit userDeviceConfigCubit;
 
-  const _DeviceInfoSection({required this.config, required this.identifier});
+  const _DeviceInfoSection({
+    required this.config,
+    required this.identifier,
+    required this.userDeviceConfigCubit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -203,11 +209,99 @@ class _DeviceInfoSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           _infoRow(context, IntifaceLocalizations.hardwareName, config.name),
-          if (config.displayName != null)
-            _infoRow(context, IntifaceLocalizations.displayName, config.displayName!),
+          _nicknameRow(context),
           _infoRow(context, IntifaceLocalizations.protocol, identifier.protocol),
           _infoRow(context, IntifaceLocalizations.address, identifier.address),
           _infoRow(context, IntifaceLocalizations.index, config.index.toString()),
+        ],
+      ),
+    );
+  }
+
+  Widget _nicknameRow(BuildContext context) {
+    final hasNickname = config.displayName != null && config.displayName!.isNotEmpty;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 140,
+            child: Text(
+              '设备昵称',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    hasNickname ? config.displayName! : '未设置',
+                    style: TextStyle(
+                      color: hasNickname ? null : Theme.of(context).colorScheme.outline,
+                      fontStyle: hasNickname ? FontStyle.normal : FontStyle.italic,
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () => _showNicknameDialog(context),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    child: Icon(
+                      hasNickname ? Icons.edit : Icons.add_circle_outline,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showNicknameDialog(BuildContext context) {
+    final controller = TextEditingController(text: config.displayName ?? '');
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('设置设备昵称'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: '输入昵称以标记此设备',
+          ),
+          onSubmitted: (value) async {
+            Navigator.pop(dialogContext);
+            await userDeviceConfigCubit.updateDisplayName(
+              identifier,
+              config,
+              value.trim(),
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(IntifaceLocalizations.cancel),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              await userDeviceConfigCubit.updateDisplayName(
+                identifier,
+                config,
+                controller.text.trim(),
+              );
+            },
+            child: Text(IntifaceLocalizations.ok),
+          ),
         ],
       ),
     );

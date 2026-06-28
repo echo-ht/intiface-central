@@ -1,8 +1,8 @@
+import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:buttplug/buttplug.dart' as buttplug_dart;
 import 'package:buttplug/client/client_device_feature.dart';
 import 'package:buttplug/messages/messages.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 
 class DeviceOutputState {}
 
@@ -28,17 +28,33 @@ abstract class DeviceOutputCubit extends Cubit<DeviceOutputState> {
 class ValueOutputCubit extends DeviceOutputCubit {
   ValueOutputCubit(super._feature, super._type);
 
+  DateTime? _lastSendTime;
+  Timer? _pendingSend;
+  static const _throttleInterval = Duration(milliseconds: 50);
+
   void setValue(int value) {
     _currentValue = value;
     emit(DeviceOutputStateUpdate(_currentValue));
-    EasyDebounce.debounce(
-      "actuator-output-${feature.feature.featureIndex}-$type",
-      const Duration(milliseconds: 100),
-      () async {
-        await feature.runOutput(
-          buttplug_dart.DeviceOutputValueConstructor(type).steps(value),
-        );
-      },
+
+    final now = DateTime.now();
+    if (_lastSendTime == null ||
+        now.difference(_lastSendTime!) >= _throttleInterval) {
+      _lastSendTime = now;
+      _pendingSend?.cancel();
+      _pendingSend = null;
+      _sendCommand(value);
+    } else {
+      _pendingSend?.cancel();
+      _pendingSend = Timer(_throttleInterval, () {
+        _lastSendTime = DateTime.now();
+        _sendCommand(_currentValue);
+      });
+    }
+  }
+
+  void _sendCommand(int value) {
+    feature.runOutput(
+      buttplug_dart.DeviceOutputValueConstructor(type).steps(value),
     );
   }
 }
@@ -48,6 +64,10 @@ class PositionWithDurationOutputCubit extends DeviceOutputCubit {
   late double _currentMax;
   double _currentDuration = 3000;
   bool _running = false;
+
+  DateTime? _lastSendTime;
+  Timer? _pendingSend;
+  static const _throttleInterval = Duration(milliseconds: 50);
 
   PositionWithDurationOutputCubit(ButtplugClientDeviceFeature feature)
     : super(feature, buttplug_dart.OutputType.hwPositionWithDuration) {
@@ -62,34 +82,38 @@ class PositionWithDurationOutputCubit extends DeviceOutputCubit {
     _currentMin = min;
     _currentMax = max;
     emit(DeviceOutputStateUpdate(_currentValue));
-    EasyDebounce.debounce(
-      "actuator-linear-${feature.deviceIndex}-${feature.feature.featureIndex}-$type",
-      const Duration(milliseconds: 100),
-      () async {
-        await feature.runOutput(
-          buttplug_dart.DeviceOutputPositionWithDurationConstructor().steps(
-            _currentValue,
-            _currentDuration.toInt(),
-          ),
-        );
-      },
-    );
+    _throttledSend();
   }
 
   void duration(double duration) {
     _currentDuration = duration;
     emit(DeviceOutputStateUpdate(_currentValue));
-    EasyDebounce.debounce(
-      "actuator-linear-${feature.deviceIndex}-${feature.feature.featureIndex}-$type",
-      const Duration(milliseconds: 100),
-      () async {
-        await feature.runOutput(
-          buttplug_dart.DeviceOutputPositionWithDurationConstructor().steps(
-            _currentValue,
-            _currentDuration.toInt(),
-          ),
-        );
-      },
+    _throttledSend();
+  }
+
+  void _throttledSend() {
+    final now = DateTime.now();
+    if (_lastSendTime == null ||
+        now.difference(_lastSendTime!) >= _throttleInterval) {
+      _lastSendTime = now;
+      _pendingSend?.cancel();
+      _pendingSend = null;
+      _sendCommand();
+    } else {
+      _pendingSend?.cancel();
+      _pendingSend = Timer(_throttleInterval, () {
+        _lastSendTime = DateTime.now();
+        _sendCommand();
+      });
+    }
+  }
+
+  void _sendCommand() {
+    feature.runOutput(
+      buttplug_dart.DeviceOutputPositionWithDurationConstructor().steps(
+        _currentValue,
+        _currentDuration.toInt(),
+      ),
     );
   }
 
