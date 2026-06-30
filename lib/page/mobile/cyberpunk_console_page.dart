@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/bloc/engine/engine_control_bloc.dart';
 import 'package:intiface_central/bloc/util/error_notifier_cubit.dart';
-import 'package:intiface_central/bloc/util/network_info_cubit.dart';
 import 'package:intiface_central/bloc/util/navigation_cubit.dart';
 import 'package:intiface_central/theme/cyberpunk.dart';
 import 'package:intiface_central/util/bluetooth_check.dart';
@@ -51,13 +50,13 @@ class CyberpunkConsolePage extends StatelessWidget {
                         title: '控制台',
                         subtitle: '闪动 · CONSOLE',
                       ),
-                      const SizedBox(height: CyberSpacing.lg),
+                      const SizedBox(height: CyberSpacing.md),
                       _EngineControlCard(engineState: engineState),
-                      const SizedBox(height: CyberSpacing.lg),
+                      const SizedBox(height: CyberSpacing.md),
                       _QuickActionsCard(),
-                      const SizedBox(height: CyberSpacing.lg),
+                      const SizedBox(height: CyberSpacing.md),
                       _ModeTabs(),
-                      const SizedBox(height: CyberSpacing.lg),
+                      const SizedBox(height: CyberSpacing.md),
                     ],
                   ),
                 ),
@@ -93,7 +92,7 @@ class CyberpunkConsolePage extends StatelessWidget {
   }
 }
 
-/// 引擎控制卡片 — 圆形霓虹按钮 + 状态 + 服务器地址
+/// 引擎控制卡片 — 紧凑横排：小圆形按钮 + 状态文本 + 服务器地址
 class _EngineControlCard extends StatelessWidget {
   final EngineControlState engineState;
 
@@ -103,7 +102,6 @@ class _EngineControlCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final engineBloc = BlocProvider.of<EngineControlBloc>(context);
     final configCubit = BlocProvider.of<IntifaceConfigurationCubit>(context);
-    final networkCubit = BlocProvider.of<NetworkInfoCubit>(context);
     final navCubit = BlocProvider.of<NavigationCubit>(context);
 
     final isRunning = engineState is! EngineStoppedState &&
@@ -137,138 +135,84 @@ class _EngineControlCard extends StatelessWidget {
       statusColor = CyberColors.textDisabled;
     }
 
-    // 服务器地址
-    String serverAddress = '';
-    if (configCubit.appMode == AppMode.engine) {
-      final host = configCubit.websocketServerAllInterfaces
-          ? (networkCubit.ip ?? '0.0.0.0')
-          : 'localhost';
-      serverAddress = 'ws://$host:${configCubit.websocketServerPort}';
-    } else if (configCubit.appMode == AppMode.restApi) {
-      final host = configCubit.websocketServerAllInterfaces
-          ? (networkCubit.ip ?? '0.0.0.0')
-          : 'localhost';
-      serverAddress = 'http://$host:${configCubit.restLocalPort}';
-    } else if (configCubit.appMode == AppMode.repeater) {
-      serverAddress = 'relay://${configCubit.repeaterRemoteAddress}';
-    }
-
     return GlassCard(
       glowColor: isRunning ? CyberColors.primary : null,
       borderColor: isRunning
           ? CyberColors.primary.withOpacity(0.2)
           : CyberColors.glassBorder,
-      padding: const EdgeInsets.all(CyberSpacing.xl),
+      padding: const EdgeInsets.fromLTRB(CyberSpacing.lg, CyberSpacing.md, CyberSpacing.lg, CyberSpacing.md),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // 圆形播放/停止按钮
-          _CircularControlButton(
-            isRunning: isRunning,
-            isStarting: isStarting,
-            statusColor: statusColor,
-            onPressed: isStarting
-                ? null
-                : () {
-                    if (isRunning) {
-                      engineBloc.add(EngineControlEventStop());
-                    } else {
-                      _startEngine(context, engineBloc, configCubit);
-                    }
-                  },
-          ),
-          const SizedBox(height: CyberSpacing.xl),
-          // 状态文本
-          Text(
-            statusText,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: statusColor,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            statusSubtext,
-            style: const TextStyle(
-              fontSize: 12,
-              color: CyberColors.textTertiary,
-            ),
-          ),
-          // 服务器地址
-          if (serverAddress.isNotEmpty) ...[
-            const SizedBox(height: CyberSpacing.lg),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: CyberSpacing.lg,
-                vertical: CyberSpacing.md,
+          // 紧凑横排：小按钮 + 状态 + 错误
+          Row(
+            children: [
+              // 小圆形按钮
+              _CircularControlButton(
+                isRunning: isRunning,
+                isStarting: isStarting,
+                statusColor: statusColor,
+                size: 56,
+                onPressed: isStarting
+                    ? null
+                    : () {
+                        if (isRunning) {
+                          engineBloc.add(EngineControlEventStop());
+                        } else {
+                          _startEngine(context, engineBloc, configCubit);
+                        }
+                      },
               ),
-              decoration: BoxDecoration(
-                color: CyberColors.primary.withOpacity(0.05),
-                borderRadius: BorderRadius.circular(CyberRadius.input),
-                border: Border.all(
-                  color: CyberColors.primary.withOpacity(0.15),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.cloud, size: 16, color: CyberColors.primary.withOpacity(0.7)),
-                  const SizedBox(width: CyberSpacing.sm),
-                  Expanded(
-                    child: Text(
-                      serverAddress,
+              const SizedBox(width: CyberSpacing.lg),
+              // 状态文本
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      statusText,
                       style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: CyberColors.primary.withOpacity(0.9),
-                        fontFamily: 'monospace',
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: statusColor,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      statusSubtext,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: CyberColors.textTertiary,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-          // 错误指示器
-          BlocBuilder<ErrorNotifierCubit, ErrorNotifierState>(
-            builder: (context, errorState) {
-              if (errorState is! ErrorNotifierTriggerState) {
-                return const SizedBox.shrink();
-              }
-              return Padding(
-                padding: const EdgeInsets.only(top: CyberSpacing.md),
-                child: GestureDetector(
-                  onTap: () => navCubit.goLogs(),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: CyberSpacing.lg,
-                      vertical: CyberSpacing.md,
-                    ),
-                    decoration: BoxDecoration(
-                      color: CyberColors.error.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(CyberRadius.input),
-                      border: Border.all(
-                        color: CyberColors.error.withOpacity(0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.warning, size: 16, color: CyberColors.error),
-                        const SizedBox(width: CyberSpacing.sm),
-                        Text(
-                          IntifaceLocalizations.error,
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: CyberColors.error,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
-              );
-            },
+              ),
+              // 错误图标
+              BlocBuilder<ErrorNotifierCubit, ErrorNotifierState>(
+                builder: (context, errorState) {
+                  if (errorState is! ErrorNotifierTriggerState) {
+                    return const SizedBox.shrink();
+                  }
+                  return GestureDetector(
+                    onTap: () => navCubit.goLogs(),
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: CyberColors.error.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: CyberColors.error.withOpacity(0.3)),
+                      ),
+                      child: Icon(Icons.warning, size: 18, color: CyberColors.error),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
         ],
       ),
@@ -302,28 +246,32 @@ class _EngineControlCard extends StatelessWidget {
   }
 }
 
-/// 圆形控制按钮 — 霓虹发光
+/// 圆形控制按钮 — 霓虹发光，可调大小
 class _CircularControlButton extends StatelessWidget {
   final bool isRunning;
   final bool isStarting;
   final Color statusColor;
   final VoidCallback? onPressed;
+  final double size;
 
   const _CircularControlButton({
     required this.isRunning,
     required this.isStarting,
     required this.statusColor,
     required this.onPressed,
+    this.size = 84,
   });
 
   @override
   Widget build(BuildContext context) {
     final buttonColor = isRunning ? CyberColors.error : CyberColors.primary;
+    final iconSize = size * 0.48;
+    final padding = size * 0.28;
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: 84,
-        height: 84,
+        width: size,
+        height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: buttonColor.withOpacity(0.15),
@@ -331,14 +279,14 @@ class _CircularControlButton extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: buttonColor.withOpacity(0.3),
-              blurRadius: 20,
+              blurRadius: size * 0.24,
               spreadRadius: 0,
             ),
           ],
         ),
         child: isStarting
             ? Padding(
-                padding: const EdgeInsets.all(24),
+                padding: EdgeInsets.all(padding),
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
                   valueColor: AlwaysStoppedAnimation(buttonColor),
@@ -346,7 +294,7 @@ class _CircularControlButton extends StatelessWidget {
               )
             : Icon(
                 isRunning ? Icons.stop_rounded : Icons.play_arrow_rounded,
-                size: 40,
+                size: iconSize,
                 color: buttonColor,
               ),
       ),
@@ -441,12 +389,12 @@ class _QuickActionsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final configCubit = BlocProvider.of<IntifaceConfigurationCubit>(context);
     return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: CyberSpacing.lg, vertical: CyberSpacing.sm),
+      padding: const EdgeInsets.symmetric(horizontal: CyberSpacing.md, vertical: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: CyberSpacing.sm, vertical: CyberSpacing.md),
+            padding: EdgeInsets.fromLTRB(CyberSpacing.sm, CyberSpacing.sm, CyberSpacing.sm, 4),
             child: CyberCardTitle(text: '快捷操作'),
           ),
           CyberSettingRow(
