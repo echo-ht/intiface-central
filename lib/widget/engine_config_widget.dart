@@ -396,13 +396,12 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
     }
 
     List<Widget> widgets = [
-      Expanded(
-        child: SettingsList(
-          key: DocsScreenshotKeys.appModeSettingsBody,
-          shrinkWrap: true,
-          darkTheme: cyberpunkSettingsTheme,
-          sections: tiles,
-        ),
+      SettingsList(
+        key: DocsScreenshotKeys.appModeSettingsBody,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        darkTheme: cyberpunkSettingsTheme,
+        sections: tiles,
       ),
     ];
 
@@ -415,9 +414,8 @@ class _EngineConfigWidgetState extends State<EngineConfigWidget> {
       );
     }
 
-    // SettingsList apparently handles its own scrolling, so do not try wrapping this in scroll views or
-    // list views. It will work on desktop and break on mobile.
-    return Expanded(child: Column(children: widgets));
+    // shrinkWrap + NeverScrollableScrollPhysics: 内层不滚动，由外层 SingleChildScrollView 统一接管
+    return Column(mainAxisSize: MainAxisSize.min, children: widgets);
   }
 }
 

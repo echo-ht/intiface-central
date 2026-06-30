@@ -37,33 +37,35 @@ class CyberpunkConsolePage extends StatelessWidget {
               curr is ClientConnectedState ||
               curr is ClientDisconnectedState,
           builder: (context, engineState) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // 固定区域：标题 + 引擎控制卡片 + 模式标签
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: CyberSpacing.xl),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CyberHeader(
-                        title: '控制台',
-                        subtitle: '闪动 · CONSOLE',
-                      ),
-                      const SizedBox(height: CyberSpacing.md),
-                      _EngineControlCard(engineState: engineState),
-                      const SizedBox(height: CyberSpacing.md),
-                      _QuickActionsCard(),
-                      const SizedBox(height: CyberSpacing.md),
-                      _ModeTabs(),
-                      const SizedBox(height: CyberSpacing.md),
-                    ],
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: CyberSpacing.xl),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const CyberHeader(
+                          title: '控制台',
+                          subtitle: '闪动 · CONSOLE',
+                        ),
+                        const SizedBox(height: CyberSpacing.md),
+                        _EngineControlCard(engineState: engineState),
+                        const SizedBox(height: CyberSpacing.md),
+                        _QuickActionsCard(),
+                        const SizedBox(height: CyberSpacing.md),
+                        _ModeTabs(),
+                        const SizedBox(height: CyberSpacing.md),
+                      ],
+                    ),
                   ),
-                ),
-                // 配置区域：EngineConfigWidget 等内部用 Expanded，需要 Column+Expanded 包裹
-                // 这些组件自带滚动，无需外层 SingleChildScrollView
-                Expanded(child: _ModeConfigArea()),
-              ],
+                  // 配置区域：整体可滚动，内层 SettingsList 用 shrinkWrap + NeverScrollable
+                  _ModeConfigArea(),
+                ],
+              ),
             );
           },
         );

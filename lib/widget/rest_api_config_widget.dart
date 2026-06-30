@@ -38,8 +38,7 @@ class _RestApiConfigWidgetState extends State<RestApiConfigWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: BlocBuilder<EngineControlBloc, EngineControlState>(
+    return BlocBuilder<EngineControlBloc, EngineControlState>(
         buildWhen: ((previous, current) =>
             current is EngineStartedState || current is EngineStoppedState),
         builder: (context, engineState) {
@@ -115,13 +114,15 @@ class _RestApiConfigWidgetState extends State<RestApiConfigWidget> {
                 ),
               ];
               return SettingsList(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 darkTheme: cyberpunkSettingsTheme,
                 sections: tiles,
               );
             },
           );
         },
-      ),
+      );
     );
   }
 }

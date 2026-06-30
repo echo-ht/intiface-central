@@ -43,8 +43,7 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: BlocBuilder<EngineControlBloc, EngineControlState>(
+    return BlocBuilder<EngineControlBloc, EngineControlState>(
         buildWhen: ((previous, current) =>
             current is EngineStartedState || current is EngineStoppedState),
         builder: (context, engineState) {
@@ -160,13 +159,15 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
               ];
               return SettingsList(
                 key: DocsScreenshotKeys.appModeSettingsBody,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 darkTheme: cyberpunkSettingsTheme,
                 sections: tiles,
               );
             },
           );
         },
-      ),
+      );
     );
   }
 }
