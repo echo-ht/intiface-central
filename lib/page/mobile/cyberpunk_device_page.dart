@@ -172,7 +172,7 @@ class _CyberpunkDeviceListView extends StatelessWidget {
                     // 标题栏 + 扫描按钮
                     CyberHeader(
                       title: '设备',
-                      subtitle: 'INTIFACE · DEVICES',
+                      subtitle: '闪动 · DEVICES',
                       trailing: _ScanButton(
                         scanning: deviceBloc.scanning,
                         engineRunning: engineRunning,

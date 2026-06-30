@@ -143,7 +143,7 @@ class IntifaceCentralApp extends StatelessWidget with WindowListener, TrayListen
     await trayManager.setIcon(
       Platform.isWindows ? 'assets/icons/intiface_central_icon.ico' : 'assets/icons/intiface_central_icon.png',
     );
-    await trayManager.setToolTip('Intiface Central');
+    await trayManager.setToolTip('闪动');
     await _updateTrayMenu();
     trayManager.addListener(this);
 
@@ -254,7 +254,7 @@ class IntifaceCentralApp extends StatelessWidget with WindowListener, TrayListen
       // Must add this line before we work with the manager.
       await windowManager.ensureInitialized();
 
-      String windowTitle = kDebugMode ? "Intiface® Central $packageVersion DEBUG" : "Intiface® Central $packageVersion";
+      String windowTitle = kDebugMode ? "闪动 $packageVersion DEBUG" : "闪动 $packageVersion";
 
       WindowOptions windowOptions = const WindowOptions(
         //center: true,
@@ -633,7 +633,7 @@ class IntifaceCentralApp extends StatelessWidget with WindowListener, TrayListen
                 return snapshot.data!;
               }
               return const MaterialApp(
-                title: 'Intiface Central',
+                title: '闪动',
                 debugShowCheckedModeBanner: false,
                 home: Scaffold(
                   body: Center(child: Image(image: AssetImage('assets/icons/intiface_central_icon.png'))),
@@ -663,7 +663,7 @@ class IntifaceCentralView extends StatelessWidget {
           _ => ThemeMode.system,
         };
         return MaterialApp(
-          title: 'Intiface Central',
+          title: '闪动',
           debugShowCheckedModeBanner: false,
           theme: isMobile() ? buildCyberpunkTheme() : _buildLightTheme(),
           darkTheme: isMobile() ? buildCyberpunkTheme() : _buildDarkTheme(),

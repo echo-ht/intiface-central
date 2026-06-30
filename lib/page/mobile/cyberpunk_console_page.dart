@@ -49,7 +49,7 @@ class CyberpunkConsolePage extends StatelessWidget {
                     children: [
                       const CyberHeader(
                         title: '控制台',
-                        subtitle: 'INTIFACE · CONSOLE',
+                        subtitle: '闪动 · CONSOLE',
                       ),
                       const SizedBox(height: CyberSpacing.lg),
                       _EngineControlCard(engineState: engineState),

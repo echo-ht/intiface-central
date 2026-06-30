@@ -221,7 +221,7 @@ class IntifaceConfigurationCubit extends Cubit<IntifaceConfigurationState> {
     crashReporting = _prefs.getBool("crashReporting2") ?? false;
 
     // Check all of our values to make sure they exist. If not, set defaults, based on platform if needed.
-    serverName = _prefs.getString("serverName") ?? "Intiface Server";
+    serverName = _prefs.getString("serverName") ?? "闪动 Server";
     serverMaxPingTime = _prefs.getInt("maxPingTime") ?? 0;
     // This should automatically be true on phones, otherwise people are going to be VERY confused.
     websocketServerAllInterfaces = _prefs.getBool("websocketServerAllInterfaces") ?? isMobile();

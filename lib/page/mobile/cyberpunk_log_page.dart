@@ -23,7 +23,7 @@ class CyberpunkLogPage extends StatelessWidget {
         // 标题栏 + 级别选择器
         CyberHeader(
           title: '日志',
-          subtitle: 'INTIFACE · LOGS',
+          subtitle: '闪动 · LOGS',
           subtitleColor: CyberColors.secondary,
           trailing: _LogLevelSelector(configCubit: configCubit),
         ),

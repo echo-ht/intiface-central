@@ -34,7 +34,7 @@ class CyberpunkSettingsPage extends StatelessWidget {
         children: [
           const CyberHeader(
             title: '设置',
-            subtitle: 'INTIFACE · SETTINGS',
+            subtitle: '闪动 · SETTINGS',
             subtitleColor: CyberColors.accent,
           ),
           const SizedBox(height: CyberSpacing.lg),
@@ -91,7 +91,7 @@ class _VersionCard extends StatelessWidget {
           ),
           const SizedBox(height: CyberSpacing.md),
           const Text(
-            'Intiface Central',
+            '闪动',
             style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: CyberColors.textPrimary),
           ),
           const SizedBox(height: 4),
