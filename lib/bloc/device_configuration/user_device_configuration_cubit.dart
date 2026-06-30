@@ -49,11 +49,11 @@ class UserDeviceConfigurationCubit extends Cubit<UserDeviceConfigurationState> {
     try {
       String? deviceConfig;
       String? userConfig;
-      if (IntifacePaths.deviceConfigFile.existsSync()) {
-        deviceConfig = IntifacePaths.deviceConfigFile.readAsStringSync();
+      if (await IntifacePaths.deviceConfigFile.exists()) {
+        deviceConfig = await IntifacePaths.deviceConfigFile.readAsString();
       }
-      if (IntifacePaths.userDeviceConfigFile.existsSync()) {
-        userConfig = IntifacePaths.userDeviceConfigFile.readAsStringSync();
+      if (await IntifacePaths.userDeviceConfigFile.exists()) {
+        userConfig = await IntifacePaths.userDeviceConfigFile.readAsString();
       }
       await setupDeviceConfigurationManager(
         baseConfig: deviceConfig,
@@ -198,7 +198,7 @@ class UserDeviceConfigurationCubit extends Cubit<UserDeviceConfigurationState> {
 
   Future<void> _saveConfigFile() async {
     var configStr = await getUserConfigStr();
-    await IntifacePaths.userDeviceConfigFile.writeAsString(configStr);
+    await atomicWriteString(IntifacePaths.userDeviceConfigFile, configStr);
     await update();
   }
 }

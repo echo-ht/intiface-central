@@ -41,7 +41,7 @@ abstract class HttpUpdateProvider implements UpdateProvider {
             .transform(utf8.decoder)
             .join()
             .timeout(_responseTimeout);
-        await _localFile.writeAsString(stringData);
+        await atomicWriteString(_localFile, stringData);
         _expectedVersion = etag!;
         logInfo(
           "HTTP Update for $_updateUrl found new version $_expectedVersion",

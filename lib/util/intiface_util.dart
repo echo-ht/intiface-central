@@ -97,3 +97,19 @@ bool isDesktop() => Platform.isLinux || Platform.isMacOS || Platform.isWindows;
 bool isMobile() => Platform.isAndroid || Platform.isIOS;
 bool supportsTray() => Platform.isMacOS || Platform.isWindows;
 bool canShowUpdate() => !(const bool.fromEnvironment('NO_VISIBLE_UPDATES'));
+
+/// 原子写入文件 — 先写入临时文件，再 rename 覆盖原文件。
+///
+/// 解决配置文件非原子写入导致的问题：
+/// - 应用被系统杀死（Android 杀后台进程）时，直接 writeAsString 会留下半截 JSON
+/// - 下载更新与启动加载并发时，可能读到正在写入的半截文件
+///
+/// rename 在同一文件系统上是原子操作，保证文件要么是完整的旧内容，要么是完整的新内容。
+Future<void> atomicWriteString(File file, String content) async {
+  final tmpPath = '${file.path}.tmp';
+  final tmpFile = File(tmpPath);
+  // 写入临时文件
+  await tmpFile.writeAsString(content, flush: true);
+  // rename 覆盖原文件 (原子操作)
+  await tmpFile.rename(file.path);
+}
