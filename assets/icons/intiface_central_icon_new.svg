@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 545.9 545.9">
+  <defs>
+    <!-- 极光渐变 - 青色光晕 -->
+    <radialGradient id="auroraCyan" cx="0.3" cy="0.3" r="0.7">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#00F0FF" stop-opacity="0"/>
+    </radialGradient>
+    <!-- 极光渐变 - 品红光晕 -->
+    <radialGradient id="auroraMagenta" cx="0.75" cy="0.7" r="0.6">
+      <stop offset="0%" stop-color="#FF00E5" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#FF00E5" stop-opacity="0"/>
+    </radialGradient>
+    <!-- 霓虹发光滤镜 -->
+    <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="neonGlowSmall" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 深紫黑底色 -->
+  <rect width="545.9" height="545.9" fill="#000010"/>
+
+  <!-- 极光渐变层 -->
+  <rect width="545.9" height="545.9" fill="url(#auroraCyan)"/>
+  <rect width="545.9" height="545.9" fill="url(#auroraMagenta)"/>
+
+  <!-- 六边形芯片边框 -->
+  <polygon
+    points="272.95,90 430,180 430,365 272.95,455 116,365 116,180"
+    fill="none"
+    stroke="#00F0FF"
+    stroke-width="3"
+    stroke-opacity="0.5"
+    filter="url(#neonGlowSmall)"
+  />
+
+  <!-- 六边形内框（细线） -->
+  <polygon
+    points="272.95,110 412,190 412,355 272.95,435 134,355 134,190"
+    fill="none"
+    stroke="#00F0FF"
+    stroke-width="1"
+    stroke-opacity="0.2"
+  />
+
+  <!-- 顶部脉冲波形 -->
+  <polyline
+    points="200,170 220,170 230,150 240,190 250,160 260,170 295,170"
+    fill="none"
+    stroke="#00F0FF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-opacity="0.7"
+    filter="url(#neonGlowSmall)"
+  />
+
+  <!-- 三条滑块轨道 + 节点 -->
+
+  <!-- 滑块 1 (上) -->
+  <line x1="160" y1="230" x2="386" y2="230" stroke="#00F0FF" stroke-width="2" stroke-opacity="0.3"/>
+  <line x1="160" y1="230" x2="300" y2="230" stroke="#00F0FF" stroke-width="3" filter="url(#neonGlowSmall)"/>
+  <circle cx="160" cy="230" r="6" fill="#00F0FF" filter="url(#neonGlowSmall)"/>
+  <circle cx="300" cy="230" r="14" fill="#000010" stroke="#00F0FF" stroke-width="2.5" filter="url(#neonGlow)"/>
+
+  <!-- 滑块 2 (中) -->
+  <line x1="160" y1="273" x2="386" y2="273" stroke="#FF00E5" stroke-width="2" stroke-opacity="0.3"/>
+  <line x1="160" y1="273" x2="340" y2="273" stroke="#FF00E5" stroke-width="3" filter="url(#neonGlowSmall)"/>
+  <circle cx="160" cy="273" r="6" fill="#FF00E5" filter="url(#neonGlowSmall)"/>
+  <circle cx="340" cy="273" r="14" fill="#000010" stroke="#FF00E5" stroke-width="2.5" filter="url(#neonGlow)"/>
+
+  <!-- 滑块 3 (下) -->
+  <line x1="160" y1="316" x2="386" y2="316" stroke="#00F0FF" stroke-width="2" stroke-opacity="0.3"/>
+  <line x1="160" y1="316" x2="250" y2="316" stroke="#00F0FF" stroke-width="3" filter="url(#neonGlowSmall)"/>
+  <circle cx="160" cy="316" r="6" fill="#00F0FF" filter="url(#neonGlowSmall)"/>
+  <circle cx="250" cy="316" r="14" fill="#000010" stroke="#00F0FF" stroke-width="2.5" filter="url(#neonGlow)"/>
+
+  <!-- 底部连接节点线 -->
+  <line x1="200" y1="370" x2="346" y2="370" stroke="#00F0FF" stroke-width="1.5" stroke-opacity="0.4"/>
+  <circle cx="200" cy="370" r="4" fill="#00F0FF" fill-opacity="0.6"/>
+  <circle cx="273" cy="370" r="4" fill="#FF00E5" fill-opacity="0.6"/>
+  <circle cx="346" cy="370" r="4" fill="#00F0FF" fill-opacity="0.6"/>
+
+  <!-- 中心标识 "IC" 字样 (极小, 作为水印) -->
+  <text x="273" y="410" text-anchor="middle" font-family="monospace" font-size="14" font-weight="bold" fill="#00F0FF" fill-opacity="0.3" letter-spacing="3">IC</text>
+</svg>

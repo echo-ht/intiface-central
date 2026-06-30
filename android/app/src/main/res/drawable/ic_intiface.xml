@@ -1,19 +1,118 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="96dp"
-    android:height="96dp"
+    android:width="108dp"
+    android:height="108dp"
     android:viewportWidth="545.9"
     android:viewportHeight="545.9">
 
+    <!-- 六边形芯片边框 -->
     <path
-        android:fillColor="#eb008b"
-        android:pathData="M350.1,245.9c-14,0 -26.4,8.9 -31.1,22.1h-145.4c-6.1,0 -11,4.9 -11,11s4.9,11 11,11h145.4c6.1,17.2 25,26.3 42.2,20.2 17.2,-6.1 26.3,-25 20.2,-42.2 -4.7,-13.3 -17.2,-22.1 -31.3,-22.1h0Z" />
+        android:fillColor="#00000000"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="3"
+        android:strokeAlpha="0.5"
+        android:pathData="M272.95,90 L430,180 L430,365 L272.95,455 L116,365 L116,180 Z" />
 
+    <!-- 六边形内框 -->
     <path
-        android:fillColor="#eb008b"
-        android:pathData="M173.6,223.8h13c6.2,17.2 25.2,26.1 42.4,19.8 9.2,-3.3 16.5,-10.6 19.8,-19.8h123.4c6.1,0 11,-4.9 11,-11s-4.9,-11 -11,-11h-123.4c-6.2,-17.2 -25.2,-26.1 -42.4,-19.8 -9.2,3.3 -16.5,10.6 -19.8,19.8h-13c-6.1,0 -11,4.9 -11,11s4.9,11 11,11Z" />
+        android:fillColor="#00000000"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="1"
+        android:strokeAlpha="0.2"
+        android:pathData="M272.95,110 L412,190 L412,355 L272.95,435 L134,355 L134,190 Z" />
 
+    <!-- 顶部脉冲波形 -->
     <path
-        android:fillColor="#eb008b"
-        android:pathData="M372.2,334.1h-79.2c-6.2,-17.2 -25.2,-26.1 -42.4,-19.8 -9.2,3.3 -16.5,10.6 -19.8,19.8h-57.2c-6.1,0 -11,4.9 -11,11s4.9,11 11,11h57.2c6.2,17.2 25.2,26.1 42.4,19.8 9.2,-3.3 16.5,-10.6 19.8,-19.8h79.2c6.1,0 11,-4.9 11,-11s-4.9,-11 -11,-11Z" />
+        android:fillColor="#00000000"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="2.5"
+        android:strokeAlpha="0.7"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M200,170 L220,170 L230,150 L240,190 L250,160 L260,170 L295,170" />
+
+    <!-- 滑块1 轨道 (上) - 青 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.3"
+        android:pathData="M160,230 L386,230" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="3"
+        android:pathData="M160,230 L300,230" />
+    <path
+        android:fillColor="#00F0FF"
+        android:pathData="M160,230 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" />
+    <path
+        android:fillColor="#000010"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="2.5"
+        android:pathData="M300,230 m-14,0 a14,14 0 1,0 28,0 a14,14 0 1,0 -28,0" />
+
+    <!-- 滑块2 轨道 (中) - 品红 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF00E5"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.3"
+        android:pathData="M160,273 L386,273" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FF00E5"
+        android:strokeWidth="3"
+        android:pathData="M160,273 L340,273" />
+    <path
+        android:fillColor="#FF00E5"
+        android:pathData="M160,273 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" />
+    <path
+        android:fillColor="#000010"
+        android:strokeColor="#FF00E5"
+        android:strokeWidth="2.5"
+        android:pathData="M340,273 m-14,0 a14,14 0 1,0 28,0 a14,14 0 1,0 -28,0" />
+
+    <!-- 滑块3 轨道 (下) - 青 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.3"
+        android:pathData="M160,316 L386,316" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="3"
+        android:pathData="M160,316 L250,316" />
+    <path
+        android:fillColor="#00F0FF"
+        android:pathData="M160,316 m-6,0 a6,6 0 1,0 12,0 a6,6 0 1,0 -12,0" />
+    <path
+        android:fillColor="#000010"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="2.5"
+        android:pathData="M250,316 m-14,0 a14,14 0 1,0 28,0 a14,14 0 1,0 -28,0" />
+
+    <!-- 底部连接节点线 -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00F0FF"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.4"
+        android:pathData="M200,370 L346,370" />
+
+    <!-- 底部三个节点 -->
+    <path
+        android:fillColor="#00F0FF"
+        android:fillAlpha="0.6"
+        android:pathData="M200,370 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+    <path
+        android:fillColor="#FF00E5"
+        android:fillAlpha="0.6"
+        android:pathData="M273,370 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
+    <path
+        android:fillColor="#00F0FF"
+        android:fillAlpha="0.6"
+        android:pathData="M346,370 m-4,0 a4,4 0 1,0 8,0 a4,4 0 1,0 -8,0" />
 
 </vector>
