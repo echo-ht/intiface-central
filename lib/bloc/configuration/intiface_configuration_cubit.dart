@@ -285,6 +285,8 @@ class IntifaceConfigurationCubit extends Cubit<IntifaceConfigurationState> {
 
     restLocalPort = _prefs.getInt("restLocalPort") ?? 3000;
     allowExperimentalRestServer = _prefs.getBool("allowExperimentalRestServer") ?? false;
+    vibrateOnConnect = _prefs.getBool("vibrateOnConnect") ?? false;
+    notifyOnDeviceConnected = _prefs.getBool("notifyOnDeviceConnected") ?? true;
     // Default for appMode built into getter, since it also requires a type conversion.
   }
 
@@ -569,6 +571,16 @@ class IntifaceConfigurationCubit extends Cubit<IntifaceConfigurationState> {
   set allowExperimentalRestServer(bool value) {
     _prefs.setBool("allowExperimentalRestServer", value);
     emit(AllowExperimentalRestServer(value));
+  }
+
+  bool get vibrateOnConnect => _prefs.getBool("vibrateOnConnect") ?? false;
+  set vibrateOnConnect(bool value) {
+    _prefs.setBool("vibrateOnConnect", value);
+  }
+
+  bool get notifyOnDeviceConnected => _prefs.getBool("notifyOnDeviceConnected") ?? true;
+  set notifyOnDeviceConnected(bool value) {
+    _prefs.setBool("notifyOnDeviceConnected", value);
   }
 
   Future<EngineOptionsExternal> getEngineOptions() async {

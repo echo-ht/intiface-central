@@ -11,6 +11,7 @@ import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:intiface_central/bloc/api_log/native_api_log.dart';
 import 'package:intiface_central/bloc/configuration/intiface_configuration_cubit.dart';
 import 'package:intiface_central/bloc/device/device_manager_bloc.dart';
+import 'package:intiface_central/bloc/device/device_output_cubit.dart';
 import 'package:intiface_central/bloc/device_configuration/device_configuration.dart';
 import 'package:intiface_central/bloc/device_configuration/user_device_configuration_cubit.dart';
 import 'package:intiface_central/bloc/engine/engine_control_bloc.dart';
@@ -32,6 +33,7 @@ import 'package:intiface_central/util/intiface_localizations.dart';
 import 'package:intiface_central/util/intiface_util.dart';
 import 'package:intiface_central/util/logging.dart';
 import 'package:intiface_central/util/mdns_platform_service.dart';
+import 'package:intiface_central/util/notification_service.dart';
 import 'package:intiface_central/theme/cyberpunk.dart';
 import 'package:intiface_central/widget/body_widget.dart';
 import 'package:intiface_central/widget/control_widget.dart';
@@ -560,6 +562,39 @@ class IntifaceCentralApp extends StatelessWidget with WindowListener, TrayListen
 
         if (state is DeviceManagerDeviceOfflineState) {
           discordBloc.add(DiscordDeviceRemovedEvent((state).device));
+        }
+      });
+    }
+
+    // 设备连接事件: 自动最强震动 + 系统通知
+    if (isMobile()) {
+      final notificationService = NotificationService();
+      await notificationService.init();
+      deviceControlBloc.stream.listen((state) async {
+        if (state is DeviceManagerDeviceOnlineState) {
+          final deviceCubit = state.device;
+          final deviceName = deviceCubit.device?.name ?? '未知设备';
+
+          // 最强震动
+          if (configCubit.vibrateOnConnect) {
+            for (var output in deviceCubit.outputs) {
+              if (output is ValueOutputCubit) {
+                try {
+                  final range = output.feature.feature.output![output.type]!.value!;
+                  output.setValue(range[1]); // 最大值
+                } catch (e) {
+                  logWarning("Failed to set max vibration on connect: $e");
+                }
+              }
+            }
+            logInfo("Device connected, set max vibration: $deviceName");
+          }
+
+          // 系统通知
+          if (configCubit.notifyOnDeviceConnected) {
+            await notificationService.showDeviceConnected(deviceName);
+            logInfo("Device connected notification sent: $deviceName");
+          }
         }
       });
     }

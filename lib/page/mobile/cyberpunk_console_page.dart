@@ -54,6 +54,8 @@ class CyberpunkConsolePage extends StatelessWidget {
                       const SizedBox(height: CyberSpacing.lg),
                       _EngineControlCard(engineState: engineState),
                       const SizedBox(height: CyberSpacing.lg),
+                      _QuickActionsCard(),
+                      const SizedBox(height: CyberSpacing.lg),
                       _ModeTabs(),
                       const SizedBox(height: CyberSpacing.lg),
                     ],
@@ -430,5 +432,44 @@ class _ModeConfigArea extends StatelessWidget {
       AppMode.repeater => const RepeaterConfigWidget(),
       AppMode.restApi => const RestApiConfigWidget(),
     };
+  }
+}
+
+/// 快捷操作卡片 — 连接震动 + 设备通知开关
+class _QuickActionsCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final configCubit = BlocProvider.of<IntifaceConfigurationCubit>(context);
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: CyberSpacing.lg, vertical: CyberSpacing.sm),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: CyberSpacing.sm, vertical: CyberSpacing.md),
+            child: CyberCardTitle(text: '快捷操作'),
+          ),
+          CyberSettingRow(
+            icon: Icons.vibration,
+            label: '连接即最强震动',
+            iconColor: CyberColors.secondary,
+            trailing: CyberToggle(
+              value: configCubit.vibrateOnConnect,
+              onChanged: (v) => configCubit.vibrateOnConnect = v,
+              activeColor: CyberColors.secondary,
+            ),
+          ),
+          CyberSettingRow(
+            icon: Icons.notifications_active_outlined,
+            label: '设备连接通知',
+            iconColor: CyberColors.primary,
+            trailing: CyberToggle(
+              value: configCubit.notifyOnDeviceConnected,
+              onChanged: (v) => configCubit.notifyOnDeviceConnected = v,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
