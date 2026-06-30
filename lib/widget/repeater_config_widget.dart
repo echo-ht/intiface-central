@@ -168,7 +168,6 @@ class _RepeaterConfigWidgetState extends State<RepeaterConfigWidget> {
           );
         },
       );
-    );
   }
 }
 

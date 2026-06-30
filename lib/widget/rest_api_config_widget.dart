@@ -123,6 +123,5 @@ class _RestApiConfigWidgetState extends State<RestApiConfigWidget> {
           );
         },
       );
-    );
   }
 }
